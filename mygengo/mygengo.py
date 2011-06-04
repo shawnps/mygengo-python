@@ -9,7 +9,7 @@
 """
 
 __author__ = 'Ryan McGrath <ryan@mygengo.com>'
-__version__ = '1.2.0'
+__version__ = '1.2.1'
 
 import httplib2, mimetypes, mimetools, re, hmac
 

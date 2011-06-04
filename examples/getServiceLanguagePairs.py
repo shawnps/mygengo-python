@@ -4,12 +4,13 @@
 from mygengo import MyGengo
 
 # Get an instance of MyGengo to work with...
-gengo = MyGengo(
-    public_key = 'your_public_key',
-    private_key = 'your_private_key',
-    sandbox = True, # possibly false, depending on your dev needs
-)
 
+gengo = MyGengo(
+    public_key = 'xpU@jqEzqnXCb#OOsAeR4z49IX|j}#dwyliMp2RIq1vM9OIKq-K#{mg~sVBUX^91',
+    private_key = '~Q9hI|sV(I^iX7|8WQ=l5=CvUmEWx3[=c5ms09|$JIuT-$aiTIYkS4~1F7^C9dw3',
+    sandbox = False, # possibly false, depending on your dev needs
+	debug = True
+)
 # Useful for figuring out what language paths are supported - e.g, if
 # we use 'en' below, we'll see what languages we can translate TO from 'en'.
 print gengo.getServiceLanguagePairs(lc_src = 'en')
