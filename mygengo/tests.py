@@ -29,22 +29,22 @@ from test_keys import public_key, private_key
 # We test in the myGengo sandbox for all these tests. Flip this if you need/want to.
 SANDBOX = True
 
-class TestPyGengoCore(unittest.TestCase):
+class TestMyGengoCore(unittest.TestCase):
 	"""
 		Handles testing the core parts of myGengo (i.e, authentication signing, etc).
 	"""
 	def test_MethodDoesNotExist(self):
-		myGengo = PyGengo(public_key = public_key, private_key = private_key, sandbox = SANDBOX)
+		myGengo = MyGengo(public_key = public_key, private_key = private_key, sandbox = SANDBOX)
 		# With how we do functions, AttributeError is a bit tricky to catch...
 		self.assertRaises(AttributeError, getattr, myGengo, 'bert')
 	
-	def test_PyGengoAuthNoCredentials(self):
-		myGengo = PyGengo(public_key = '', private_key = '', sandbox = SANDBOX)
-		self.assertRaises(PyGengoError, myGengo.getAccountStats)
+	def test_MyGengoAuthNoCredentials(self):
+		myGengo = MyGengo(public_key = '', private_key = '', sandbox = SANDBOX)
+		self.assertRaises(MyGengoError, myGengo.getAccountStats)
 	
-	def test_PyGengoAuthBadCredentials(self):
-		myGengo = PyGengo(public_key = 'bert', private_key = 'beeeerrrttttt', sandbox = SANDBOX)
-		self.assertRaises(PyGengoAuthError, myGengo.getAccountStats)
+	def test_MyGengoAuthBadCredentials(self):
+		myGengo = MyGengo(public_key = 'bert', private_key = 'beeeerrrttttt', sandbox = SANDBOX)
+		self.assertRaises(MyGengoAuthError, myGengo.getAccountStats)
 
 
 class TestAccountMethods(unittest.TestCase):
@@ -54,12 +54,12 @@ class TestAccountMethods(unittest.TestCase):
 		method; if your keys work with these methods, well...
 	"""
 	def test_getAccountStats(self):
-		myGengo = PyGengo(public_key = public_key, private_key = private_key, sandbox = SANDBOX)
+		myGengo = MyGengo(public_key = public_key, private_key = private_key, sandbox = SANDBOX)
 		stats = myGengo.getAccountStats()
 		self.assertEqual(stats['opstat'], 'ok')
 	
 	def test_getAccountBalance(self):
-		myGengo = PyGengo(public_key = public_key, private_key = private_key, sandbox = SANDBOX)
+		myGengo = MyGengo(public_key = public_key, private_key = private_key, sandbox = SANDBOX)
 		balance = myGengo.getAccountBalance()
 		self.assertEqual(balance['opstat'], 'ok')
 
@@ -70,13 +70,13 @@ class TestLanguageServiceMethods(unittest.TestCase):
 		service support from myGengo.
 	"""
 	def test_getServiceLanguagePairs(self):
-		myGengo = PyGengo(public_key = public_key, private_key = private_key, sandbox = SANDBOX)
+		myGengo = MyGengo(public_key = public_key, private_key = private_key, sandbox = SANDBOX)
 		resp = myGengo.getServiceLanguagePairs()
 		print pprint(resp)
 		self.assertEqual(resp['opstat'], 'ok')
 	
 	def test_getServiceLanguages(self):
-		myGengo = PyGengo(public_key = public_key, private_key = private_key, sandbox = SANDBOX)
+		myGengo = MyGengo(public_key = public_key, private_key = private_key, sandbox = SANDBOX)
 		resp = myGengo.getServiceLanguages()
 		print pprint(resp)
 		self.assertEqual(resp['opstat'], 'ok')
@@ -101,7 +101,7 @@ class TestTranslationJobFlow(unittest.TestCase):
 			Creates the initial batch of jobs for the other test functions here to operate on.
 		"""
 		# First we'll create three jobs - one regular, and two at the same time...
-		self.myGengo = PyGengo(public_key = public_key, private_key = private_key, sandbox = SANDBOX)		
+		self.myGengo = MyGengo(public_key = public_key, private_key = private_key, sandbox = SANDBOX)		
 		self.created_job_ids = []
 		
 		single_job = {
