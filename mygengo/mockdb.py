@@ -17,6 +17,7 @@
 api_urls = {
 	'base': 'http://api.mygengo.com/{{version}}',
 	'sandbox': 'http://api.sandbox.mygengo.com/{{version}}',
+	'hackathon': 'http://api.sandbox.mygengo.ht/{{version}}'
 }
 
 # The API endpoint 'table', 'database', 'hash', 'dictionary', whatever

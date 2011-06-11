@@ -9,7 +9,7 @@
 """
 
 __author__ = 'Ryan McGrath <ryan@mygengo.com>'
-__version__ = '1.2.1'
+__version__ = '1.2.2'
 
 import httplib2, mimetypes, mimetools, re, hmac
 
@@ -71,7 +71,7 @@ class MyGengoAuthError(MyGengoError):
 		return repr(self.msg)
 
 class MyGengo(object):
-	def __init__(self, public_key = None, private_key = None, sandbox = False, api_version = 1, headers = None, debug = False):
+	def __init__(self, public_key = None, private_key = None, sandbox = False, api_version = 1, headers = None, debug = False, hackathon = False):
 		"""MyGengo(public_key = None, private_key = None, sandbox = False, headers = None)
 
 			Instantiates an instance of MyGengo.
@@ -84,6 +84,8 @@ class MyGengo(object):
 				debug - a flag (True/False) which will cause things to properly blow the hell up on exceptions. Useful for debugging. ;P
 		"""
 		self.api_url = api_urls['sandbox'] if sandbox is True else api_urls['base']
+		if hackathon is True:
+			self.api_url = api_urls['hackathon']
 		self.api_version = api_version
 		self.public_key = public_key
 		self.private_key = private_key
@@ -176,6 +178,7 @@ class MyGengo(object):
 				resp, content = self.client.request(base, fn['method'], headers = headers, body = query_data)
 			else:
 				query_string = urlencode(sorted(query_params.items(), key = itemgetter(0)))
+				print query_string
 				if self.private_key is not None:
 					query_hmac = hmac.new(self.private_key, query_string, sha1)
 					query_params['api_sig'] = query_hmac.hexdigest()
@@ -183,8 +186,9 @@ class MyGengo(object):
 				
 				if self.debug is True:
 					print query_string
-				
+				print query_string
 				resp, content = self.client.request(base + '?%s' % query_string, fn['method'], headers = self.headers)
+				print content
 			results = json.loads(content)
 			
 			# See if we got any weird or odd errors back that we can cleanly raise on or something...
