@@ -9,7 +9,7 @@
 """
 
 __author__ = 'Ryan McGrath <ryan@mygengo.com>'
-__version__ = '1.2.2'
+__version__ = '1.3'
 
 import httplib2, mimetypes, mimetools, re, hmac
 
@@ -71,7 +71,7 @@ class MyGengoAuthError(MyGengoError):
 		return repr(self.msg)
 
 class MyGengo(object):
-	def __init__(self, public_key = None, private_key = None, sandbox = False, api_version = 1, headers = None, debug = False, hackathon = False):
+	def __init__(self, public_key = None, private_key = None, sandbox = False, api_version = '1.1', headers = None, debug = False, hackathon = False):
 		"""MyGengo(public_key = None, private_key = None, sandbox = False, headers = None)
 
 			Instantiates an instance of MyGengo.
@@ -83,10 +83,8 @@ class MyGengo(object):
 				headers - User agent header, dictionary style ala {'User-Agent': 'Bert'}
 				debug - a flag (True/False) which will cause things to properly blow the hell up on exceptions. Useful for debugging. ;P
 		"""
-		self.api_url = api_urls['sandbox'] if sandbox is True else api_urls['base']
-		if hackathon is True:
-			self.api_url = api_urls['hackathon']
-		self.api_version = api_version
+		self.api_url = api_urls['sandbox'] if sandbox is True else api_urls['base']	
+		self.api_version = str(api_version)
 		self.public_key = public_key
 		self.private_key = private_key
 		# If there's headers, set them, otherwise be an embarassing parent for their own good.
@@ -124,14 +122,15 @@ class MyGengo(object):
 			# Do a check here for specific job sets - we need to support posting multiple jobs
 			# at once, so see if there's an dictionary of jobs passed in, pop it out, let things go on as normal,
 			# then pick this chain back up below...
-			job = kwargs.pop('job', None)
-			jobs = kwargs.pop('jobs', None)
-			comment = kwargs.pop('comment', None)
-			action = kwargs.pop('action', None)
+			post_data = {}
+			if 'job' in kwargs: post_data['job'] = kwargs.pop('job', None)
+			if 'jobs' in kwargs: post_data['jobs'] = kwargs.pop('jobs', None)
+			if 'jobs' in kwargs: post_data['comment'] = kwargs.pop('comment', None)
+			if 'action' in kwargs: post_data['action'] = kwargs.pop('action', None)
 			
 			# Set up a true base URL, abstracting away the need to care about the sandbox mode
 			# or API versioning at this stage.
-			base_url = self.api_url.replace('{{version}}', 'v%d' % self.api_version)
+			base_url = self.api_url.replace('{{version}}', 'v%s' % self.api_version)
 			
 			# Go through and replace any mustaches that are in our API url with their appropriate key/value pairs...
 			# NOTE: We pop() here because we don't want the extra data included and messing up our hash down the road.
@@ -150,45 +149,11 @@ class MyGengo(object):
 				query_params['api_key'] = self.public_key
 			query_params['ts'] = str(int(time()))
 			
-			# Encoding jobs becomes a bit different than any other method call, so we catch them and do a little
-			# JSON-dumping action. Catching them also allows us to provide some sense of portability between the various
-			# job-posting methods in that they can all safely rely on passing dictionaries around. Huzzah!
-			if fn['method'] == 'POST' or fn['method'] == 'PUT':
-				if job is not None:
-					query_params['data'] = json.dumps({'job': job}, separators = (',', ':'))
-				elif jobs is not None:
-					query_params['data'] = json.dumps(jobs, separators = (',', ':'))
-				elif comment is not None:
-					query_params['data'] = json.dumps(comment, separators = (',', ':'))
-				elif action is not None:
-					query_params['data'] = json.dumps(action, separators = (',', ':'))
-				
-				query_json = json.dumps(query_params, separators = (',', ':'), sort_keys = True).replace('/', '\\/')
-				query_hmac = hmac.new(self.private_key, query_json, sha1)
-				query_params['api_sig'] = query_hmac.hexdigest()
-				query_data = urlencode(query_params)
-				
-				# Httplib2 doesn't assume this for POST requests, but in the case of the myGengo API it's a bit of a hidden necessity.
-				headers = self.headers
-				headers['Content-Type'] = 'application/x-www-form-urlencoded'
-				
-				if self.debug is True:
-					print query_data
-				
-				resp, content = self.client.request(base, fn['method'], headers = headers, body = query_data)
+			# If any further APIs require their own special signing needs, fork here...
+			if self.api_version == '1':
+				resp, content = self.signAndRequestAPIV1(fn, base, query_params, post_data)
 			else:
-				query_string = urlencode(sorted(query_params.items(), key = itemgetter(0)))
-				print query_string
-				if self.private_key is not None:
-					query_hmac = hmac.new(self.private_key, query_string, sha1)
-					query_params['api_sig'] = query_hmac.hexdigest()
-					query_string = urlencode(query_params)
-				
-				if self.debug is True:
-					print query_string
-				print query_string
-				resp, content = self.client.request(base + '?%s' % query_string, fn['method'], headers = self.headers)
-				print content
+				resp, content = self.signAndRequestAPILatest(fn, base, query_params, post_data)
 			results = json.loads(content)
 			
 			# See if we got any weird or odd errors back that we can cleanly raise on or something...
@@ -202,6 +167,99 @@ class MyGengo(object):
 			return get.__get__(self)
 		else:
 			raise AttributeError
+	
+	def signAndRequestAPIV1(self, fn, base, query_params, post_data = {}):
+		"""
+			Request signatures between API v1 and later versions of the API differ greatly in
+			how they're done, so they're kept in separate methods for now.
+
+			fn - object mapping from mockdb describing POST, etc.
+			base - Base URL to ping.
+			query_params - Dictionary of data eventually getting sent over to myGengo.
+			post_data - Any extra special post data to get sent over.
+		"""
+		# Encoding jobs becomes a bit different than any other method call, so we catch them and do a little
+		# JSON-dumping action. Catching them also allows us to provide some sense of portability between the various
+		# job-posting methods in that they can all safely rely on passing dictionaries around. Huzzah!
+		if fn['method'] == 'POST' or fn['method'] == 'PUT':
+			if 'job' in post_data:
+				query_params['data'] = json.dumps({'job': post_data['job']}, separators = (',', ':'))
+			elif 'jobs' in post_data:
+				query_params['data'] = json.dumps(post_data['jobs'], separators = (',', ':'))
+			elif 'comment' in post_data:
+				query_params['data'] = json.dumps(post_data['comment'], separators = (',', ':'))
+			elif 'action' in post_data:
+				query_params['data'] = json.dumps(post_data['action'], separators = (',', ':'))
+			
+			query_json = json.dumps(query_params, separators = (',', ':'), sort_keys = True).replace('/', '\\/')
+			query_hmac = hmac.new(self.private_key, query_json, sha1)
+			query_params['api_sig'] = query_hmac.hexdigest()
+			query_data = urlencode(query_params)
+			
+			# Httplib2 doesn't assume this for POST requests, but in the case of the myGengo API it's a bit of a hidden necessity.
+			headers = self.headers
+			headers['Content-Type'] = 'application/x-www-form-urlencoded'
+			
+			if self.debug is True: print query_data
+			return self.client.request(base, fn['method'], headers = headers, body = query_data)
+		else:
+			query_string = urlencode(sorted(query_params.items(), key = itemgetter(0)))
+			print query_string
+			if self.private_key is not None:
+				query_hmac = hmac.new(self.private_key, query_string, sha1)
+				query_params['api_sig'] = query_hmac.hexdigest()
+				query_string = urlencode(query_params)
+			
+			if self.debug is True: print query_string
+			return self.client.request(base + '?%s' % query_string, fn['method'], headers = self.headers)
+
+	def signAndRequestAPILatest(self, fn, base, query_params, post_data = {}):
+		"""
+			Request signatures between API v1 and later versions of the API differ greatly in
+			how they're done, so they're kept in separate methods for now.
+
+			This method signs the request with just the timestamp and private key, which is what
+			api v1.1 relies on.
+
+			fn - object mapping from mockdb describing POST, etc.
+			base - Base URL to ping.
+			query_params - Dictionary of data eventually getting sent over to myGengo.
+			post_data - Any extra special post data to get sent over.
+		"""
+		# Encoding jobs becomes a bit different than any other method call, so we catch them and do a little
+		# JSON-dumping action. Catching them also allows us to provide some sense of portability between the various
+		# job-posting methods in that they can all safely rely on passing dictionaries around. Huzzah!
+		if fn['method'] == 'POST' or fn['method'] == 'PUT':
+			if 'job' in post_data:
+				query_params['data'] = json.dumps({'job': post_data['job']}, separators = (',', ':'))
+			elif 'jobs' in post_data:
+				query_params['data'] = json.dumps(post_data['jobs'], separators = (',', ':'))
+			elif 'comment' in post_data:
+				query_params['data'] = json.dumps(post_data['comment'], separators = (',', ':'))
+			elif 'action' in post_data:
+				query_params['data'] = json.dumps(post_data['action'], separators = (',', ':'))
+			
+			query_json = json.dumps(query_params, separators = (',', ':'), sort_keys = True).replace('/', '\\/')
+			query_hmac = hmac.new(self.private_key, query_params['ts'], sha1)
+			query_params['api_sig'] = query_hmac.hexdigest()
+			query_data = urlencode(query_params)
+			
+			# Httplib2 doesn't assume this for POST requests, but in the case of the myGengo API it's a bit of a hidden necessity.
+			headers = self.headers
+			headers['Content-Type'] = 'application/x-www-form-urlencoded'
+			
+			if self.debug is True: print query_data
+			return self.client.request(base, fn['method'], headers = headers, body = query_data)
+		else:
+			query_string = urlencode(sorted(query_params.items(), key = itemgetter(0)))
+			print query_string
+			if self.private_key is not None:
+				query_hmac = hmac.new(self.private_key, query_params['ts'], sha1)
+				query_params['api_sig'] = query_hmac.hexdigest()
+				query_string = urlencode(query_params)
+			
+			if self.debug is True: print query_string
+			return self.client.request(base + '?%s' % query_string, fn['method'], headers = self.headers)
 	
 	@staticmethod
 	def unicode2utf8(text):
