@@ -15,6 +15,8 @@
 """
 
 import unittest
+import random
+
 from pprint import pprint
 from mygengo import MyGengo, MyGengoError, MyGengoAuthError
 
@@ -107,7 +109,7 @@ class TestTranslationJobFlow(unittest.TestCase):
 		single_job = {
 			'type': 'text',
 			'slug': 'Single :: English to Japanese',
-			'body_src': 'Testing myGengo API library calls.',
+			'body_src': 'Test%ding myGe%dngo A%dPI li%dbrary calls.' % (int(random.randrange(1,226,1)), int(random.randrange(1,226,1)), int(random.randrange(1,226,1)), int(random.randrange(1,226,1))),
 			'lc_src': 'en',
 			'lc_tgt': 'ja',
 			'tier': 'standard',
@@ -118,7 +120,7 @@ class TestTranslationJobFlow(unittest.TestCase):
 			'job_1': {
 				'type': 'text',
 				'slug': 'Multiple :: English to Japanese',
-				'body_src': 'How is the weather?',
+				'body_src': 'H%dow i%ds th%de weather?' % (int(random.randrange(1,226,1)), int(random.randrange(1,226,1)), int(random.randrange(1,226,1))),
 				'lc_src': 'en',
 				'lc_tgt': 'ja',
 				'tier': 'standard',
@@ -126,7 +128,7 @@ class TestTranslationJobFlow(unittest.TestCase):
 			'job_2': {
 				'type': 'text',
 				'slug': 'Multiple :: Japanese To English',
-				'body_src': '天気はどうですか',
+				'body_src': '天%d気%dはど%dうですか' % (int(random.randrange(1,226,1)), int(random.randrange(1,226,1)), int(random.randrange(1,226,1))),
 				'lc_src': 'ja',
 				'lc_tgt': 'en',
 				'tier': 'ultra',
