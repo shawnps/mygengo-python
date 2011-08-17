@@ -123,10 +123,10 @@ class MyGengo(object):
 			# at once, so see if there's an dictionary of jobs passed in, pop it out, let things go on as normal,
 			# then pick this chain back up below...
 			post_data = {}
-			if 'job' in kwargs: post_data['job'] = kwargs.pop('job', None)
-			if 'jobs' in kwargs: post_data['jobs'] = kwargs.pop('jobs', None)
-			if 'jobs' in kwargs: post_data['comment'] = kwargs.pop('comment', None)
-			if 'action' in kwargs: post_data['action'] = kwargs.pop('action', None)
+			if 'job' in kwargs: post_data['job'] = {'job': kwargs.pop('job')}
+			if 'jobs' in kwargs: post_data['jobs'] = kwargs.pop('jobs')
+			if 'comment' in kwargs: post_data['comment'] = kwargs.pop('comment')
+			if 'action' in kwargs: post_data['action'] = kwargs.pop('action')
 			
 			# Set up a true base URL, abstracting away the need to care about the sandbox mode
 			# or API versioning at this stage.
@@ -158,6 +158,12 @@ class MyGengo(object):
 			
 			# See if we got any weird or odd errors back that we can cleanly raise on or something...
 			if 'opstat' in results and results['opstat'] != 'ok':
+				print '-' * 80
+				print base
+				print query_params
+				print content
+				print resp
+				print '-' * 80
 				raise MyGengoError(results['err']['msg'], results['err']['code'])
 			
 			# If not, screw it, return the junks!
@@ -183,7 +189,7 @@ class MyGengo(object):
 		# job-posting methods in that they can all safely rely on passing dictionaries around. Huzzah!
 		if fn['method'] == 'POST' or fn['method'] == 'PUT':
 			if 'job' in post_data:
-				query_params['data'] = json.dumps({'job': post_data['job']}, separators = (',', ':'))
+				query_params['data'] = json.dumps(post_data['job'], separators = (',', ':'))
 			elif 'jobs' in post_data:
 				query_params['data'] = json.dumps(post_data['jobs'], separators = (',', ':'))
 			elif 'comment' in post_data:
@@ -231,7 +237,7 @@ class MyGengo(object):
 		# job-posting methods in that they can all safely rely on passing dictionaries around. Huzzah!
 		if fn['method'] == 'POST' or fn['method'] == 'PUT':
 			if 'job' in post_data:
-				query_params['data'] = json.dumps({'job': post_data['job']}, separators = (',', ':'))
+				query_params['data'] = json.dumps(post_data['job'], separators = (',', ':'))
 			elif 'jobs' in post_data:
 				query_params['data'] = json.dumps(post_data['jobs'], separators = (',', ':'))
 			elif 'comment' in post_data:
