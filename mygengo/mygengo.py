@@ -158,12 +158,6 @@ class MyGengo(object):
 			
 			# See if we got any weird or odd errors back that we can cleanly raise on or something...
 			if 'opstat' in results and results['opstat'] != 'ok':
-				print '-' * 80
-				print base
-				print query_params
-				print content
-				print resp
-				print '-' * 80
 				raise MyGengoError(results['err']['msg'], results['err']['code'])
 			
 			# If not, screw it, return the junks!
@@ -210,7 +204,6 @@ class MyGengo(object):
 			return self.client.request(base, fn['method'], headers = headers, body = query_data)
 		else:
 			query_string = urlencode(sorted(query_params.items(), key = itemgetter(0)))
-			print query_string
 			if self.private_key is not None:
 				query_hmac = hmac.new(self.private_key, query_string, sha1)
 				query_params['api_sig'] = query_hmac.hexdigest()
@@ -258,7 +251,6 @@ class MyGengo(object):
 			return self.client.request(base, fn['method'], headers = headers, body = query_data)
 		else:
 			query_string = urlencode(sorted(query_params.items(), key = itemgetter(0)))
-			print query_string
 			if self.private_key is not None:
 				query_hmac = hmac.new(self.private_key, query_params['ts'], sha1)
 				query_params['api_sig'] = query_hmac.hexdigest()

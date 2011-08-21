@@ -74,13 +74,11 @@ class TestLanguageServiceMethods(unittest.TestCase):
 	def test_getServiceLanguagePairs(self):
 		myGengo = MyGengo(public_key = public_key, private_key = private_key, sandbox = SANDBOX)
 		resp = myGengo.getServiceLanguagePairs()
-		print pprint(resp)
 		self.assertEqual(resp['opstat'], 'ok')
 	
 	def test_getServiceLanguages(self):
 		myGengo = MyGengo(public_key = public_key, private_key = private_key, sandbox = SANDBOX)
 		resp = myGengo.getServiceLanguages()
-		print pprint(resp)
 		self.assertEqual(resp['opstat'], 'ok')
 
 
