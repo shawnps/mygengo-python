@@ -15,9 +15,8 @@
 # myGengo API urls. {{version}} gets replaced with v1/etc
 # at run time.
 api_urls = {
-	'base': 'http://api.mygengo.com/{{version}}',
 	'sandbox': 'http://api.sandbox.mygengo.com/{{version}}',
-	'hackathon': 'http://api.sandbox.mygengo.ht/{{version}}'
+	'base': 'http://api.mygengo.com/{{version}}'
 }
 
 # The API endpoint 'table', 'database', 'hash', 'dictionary', whatever
