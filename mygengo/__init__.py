@@ -1,1 +1,1 @@
-from mygengo import MyGengo
+from mygengo import MyGengo, MyGengoError, MyGengoAuthError
