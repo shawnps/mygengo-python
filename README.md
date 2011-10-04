@@ -314,6 +314,54 @@ updateObj = {'action': 'purchase'}
 gengo.updateTranslationJob(id = 42, action = updateObj)
 ```
 
+MyGengo.updateTranslationJobs()
+----------------------------------------------------------------------------------------------------------
+Updates multiple existing jobs. A bit of a hamburger method in that you can cook this one many different ways - pay
+attention to the parameter specifications.
+
+### Parameters:
+- _id_: Required. The ID of the job you're updating.
+- _action_: Required. A dictionary describing the actions you are performing on these job ("purchase", "revise", "approve", "reject"). Some
+of these actions require other parameters, see their respective sections immediately below.
+
+### "purchase" Parameters:
+None
+
+### "revise" Parameters:
+- _comment_: Optional. A comment describing the revision.
+
+### "approve" Parameters:
+- _rating_: Required. 1 - 5, 1 = ohgodwtfisthis, 5 = I want yo babies yo,
+- _for_translator_: Optional. Comments that you can pass on to the translator.
+- _for_mygengo_: Optional. Comments to send to the myGengo staff (kept private on myGengo's end)
+- _public_: Optional. 1 (true) / 0 (false, default). Whether myGengo can share this feedback publicly.
+
+### "reject" Parameters:
+- _reason_: Required. Reason for rejection (must be "quality", "incomplete", "other")
+- _comment_: Required. Explain your rejection, especially if all you put was "other".
+- _captcha_: Required. The captcha image text. Each job in a "reviewable" state will have a captcha_url value, which is a URL to an image. This captcha value is required only if a job is to be rejected. If the captcha is wrong, a URL for a new captcha is also included with the error message.
+- _follow_up_: Optional. "requeue" (default) or "cancel". If you choose "requeue" the job will be rejected and then passed onto another translator. If you choose "cancel" the job will be completely cancelled upon rejection.
+
+### Example:
+``` python
+from mygengo import MyGengo
+
+gengo = MyGengo(
+    public_key = 'your_public_key',
+    private_key = 'your_private_key',
+    sandbox = True, # possibly False, depending on your dev needs
+)
+
+# Some example action objects, choose one to test by uncommenting
+updateObj = {'action': 'purchase'}
+# updateObj = {'action': 'revise', 'comment': 'Thanks but no thanks'}
+# updateObj = {'action': 'approve', 'rating': 1, 'for_translator': 'Thanks!'}
+# updateObj = {'action': 'reject', 'reason': 'quality', 'comment': 'My grandmother does better.', 'captcha': 'bert'}
+
+gengo.updateTranslationJob(id = 42, action = updateObj)
+```
+
+
 MyGengo.getTranslationJob()
 ----------------------------------------------------------------------------------------------------------
 Retrieves a specific job from mygengo.
@@ -520,6 +568,26 @@ gengo = MyGengo(
 )
 
 gengo.deleteTranslationJob(id = 42)
+```
+
+MyGengo.deleteTranslationJobs()
+----------------------------------------------------------------------------------------------------------
+Cancels multiple jobs. You can only cancel a job if it has not been started already by a translator.
+
+### Parameters:
+- _id_: Required. The ID of the job you want to delete.
+
+### Example:
+``` python
+from mygengo import MyGengo
+
+gengo = MyGengo(
+    public_key = 'your_public_key',
+    private_key = 'your_private_key',
+    sandbox = True, # possibly False, depending on your dev needs
+)
+
+gengo.deleteTranslationJobs(ids = [42, 43, 44, 56])
 ```
 
 MyGengo.getServiceLanguages()

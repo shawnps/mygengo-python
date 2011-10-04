@@ -9,7 +9,7 @@
 """
 
 __author__ = 'Ryan McGrath <ryan@mygengo.com>'
-__version__ = '1.3.1'
+__version__ = '1.3.2'
 
 import httplib2, mimetypes, mimetools, re, hmac
 
@@ -127,6 +127,11 @@ class MyGengo(object):
 			if 'jobs' in kwargs: post_data['jobs'] = kwargs.pop('jobs')
 			if 'comment' in kwargs: post_data['comment'] = kwargs.pop('comment')
 			if 'action' in kwargs: post_data['action'] = kwargs.pop('action')
+			if 'job_ids' in kwargs: post_data['job_ids'] = kwargs.pop('job_ids')
+			
+			# This is for the one-off GET call that acts like a POST call... don't ask. ;P
+			if 'ids' in kwargs:
+				kwargs['ids'] = '/%s' % ','.join(map(lambda i: str(i), ids))
 			
 			# Set up a true base URL, abstracting away the need to care about the sandbox mode
 			# or API versioning at this stage.

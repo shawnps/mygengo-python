@@ -5,7 +5,7 @@ from setuptools import setup
 from setuptools import find_packages
 
 __author__ = 'Ryan McGrath <ryan@mygengo.com>'
-__version__ = '1.3.1'
+__version__ = '1.3.2'
 
 setup(
 	# Basic package information.
