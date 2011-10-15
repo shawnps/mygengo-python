@@ -7,8 +7,7 @@ from pprint import pprint
 mygengo = MyGengo(
     public_key = 'your public key',
     private_key = 'your private key',
-    sandbox = False,
-	debug = True
+    sandbox = False
 )
 
 # Pretty-print a list of every supported language
