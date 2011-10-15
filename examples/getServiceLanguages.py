@@ -2,13 +2,14 @@
 #!/usr/bin/python
 
 from mygengo import MyGengo
+from pprint import pprint
 
-# Get an instance of MyGengo to work with...
-gengo = MyGengo(
-    public_key = 'your_public_key',
-    private_key = 'your_private_key',
-    sandbox = True, # possibly false, depending on your dev needs
+mygengo = MyGengo(
+    public_key = 'your public key',
+    private_key = 'your private key',
+    sandbox = False,
+	debug = True
 )
 
-# Get a list of every supported language, with their respective language codes.
-print gengo.getServiceLanguages()
+# Pretty-print a list of every supported language
+pprint(mygengo.getServiceLanguages())
