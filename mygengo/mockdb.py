@@ -48,10 +48,6 @@ apihash  = {
 		'url': '/translate/job/{{id}}',
 		'method': 'PUT',
 	},
-	'updateTranslationJobs': {
-		'url': '/translate/jobs',
-		'method': 'PUT',
-	},
 
 	# Viewing existing translation requests.
 	'getTranslationJob': {
@@ -59,11 +55,11 @@ apihash  = {
 		'method': 'GET',
 	},
 	'getTranslationJobs': {
-		'url': '/translate/jobs{{ids}}',
+		'url': '/translate/jobs',
 		'method': 'GET',
 	},
 	'getTranslationJobBatch': {
-		'url': '/translate/jobs/group/{{group_id}}',
+		'url': '/translate/jobs/{{id}}',
 		'method': 'GET',
 	},
 
@@ -102,10 +98,6 @@ apihash  = {
 	# Delete a job...
 	'deleteTranslationJob': {
 		'url': '/translate/job/{{id}}',
-		'method': 'DELETE',
-	},
-	'deleteTranslationJobs': {
-		'url': '/translate/jobs',
 		'method': 'DELETE',
 	},
 
