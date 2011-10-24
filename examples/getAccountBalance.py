@@ -12,4 +12,4 @@ gengo = MyGengo(
 )
 
 # Retrieve and print the account balance. Properties ahoy!
-print gengo.getAccountBalance()['response']['credits']
+print gengo.getAccountBalance()
