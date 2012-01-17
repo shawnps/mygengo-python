@@ -90,7 +90,7 @@ class MyGengo(object):
 		# If there's headers, set them, otherwise be an embarassing parent for their own good.
 		self.headers = headers
 		if self.headers is None:
-			self.headers = {'User-agent': 'myGengo Python Library v%s' % __version__}
+			self.headers = {'User-agent': 'myGengo Python Library; Version %s; http://mygengo.com/' % __version__}
 		# No matter whether we get some supplied or use the generic, tell it we want JSON. ;P
 		self.headers['Accept'] = 'application/json'
 		self.debug = debug
