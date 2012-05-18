@@ -12,4 +12,4 @@ gengo = MyGengo(
 
 # This method is a bit tricky; you can call it like below, but how you treat
 # the returned data is very much up to you.
-gengo.getTranslationJobPreview(id = 42)
+gengo.getTranslationJobPreviewImage(id = 42)
