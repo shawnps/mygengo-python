@@ -547,7 +547,7 @@ gengo = MyGengo(
     sandbox = True, # possibly False, depending on your dev needs
 )
 
-gengo.getTranslationJobPreview(id = 42)
+gengo.getTranslationJobPreviewImage(id = 42)
 ```
 
 MyGengo.deleteTranslationJob()
