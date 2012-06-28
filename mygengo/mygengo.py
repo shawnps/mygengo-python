@@ -71,7 +71,7 @@ class MyGengoAuthError(MyGengoError):
 		return repr(self.msg)
 
 class MyGengo(object):
-	def __init__(self, public_key = None, private_key = None, sandbox = False, api_version = '1.1', headers = None, debug = False, hackathon = False):
+	def __init__(self, public_key = None, private_key = None, sandbox = False, api_version = '1.1', headers = None, debug = False):
 		"""MyGengo(public_key = None, private_key = None, sandbox = False, headers = None)
 
 			Instantiates an instance of MyGengo.
