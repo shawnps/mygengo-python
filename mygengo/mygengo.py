@@ -83,8 +83,10 @@ class MyGengo(object):
 				headers - User agent header, dictionary style ala {'User-Agent': 'Bert'}
 				debug - a flag (True/False) which will cause things to properly blow the hell up on exceptions. Useful for debugging. ;P
 		"""
-		self.api_url = api_urls['sandbox'] if sandbox is True else api_urls['base']	
+		self.api_url = api_urls['sandbox'] if sandbox is True else api_urls['base']
 		self.api_version = str(api_version)
+                if self.api_version not in ( '1.1', '2' ):
+                        raise Exception("mygengo-python library only supports versions 1.1 and 2 at the moment, please keep api_version to 1.1 or 2")
 		self.public_key = public_key
 		self.private_key = private_key
 		# If there's headers, set them, otherwise be an embarassing parent for their own good.
@@ -155,10 +157,8 @@ class MyGengo(object):
 			query_params['ts'] = str(int(time()))
 			
 			# If any further APIs require their own special signing needs, fork here...
-			if self.api_version == '1':
-				resp, content = self.signAndRequestAPIV1(fn, base, query_params, post_data)
-			else:
-				resp, content = self.signAndRequestAPILatest(fn, base, query_params, post_data)
+                        # For now, we are supporting 1.1 only, but 2 is desired at some point.
+			resp, content = self.signAndRequestAPILatest(fn, base, query_params, post_data)
 			results = json.loads(content)
 			
 			# See if we got any weird or odd errors back that we can cleanly raise on or something...
@@ -173,50 +173,6 @@ class MyGengo(object):
 		else:
 			raise AttributeError
 	
-	def signAndRequestAPIV1(self, fn, base, query_params, post_data = {}):
-		"""
-			Request signatures between API v1 and later versions of the API differ greatly in
-			how they're done, so they're kept in separate methods for now.
-
-			fn - object mapping from mockdb describing POST, etc.
-			base - Base URL to ping.
-			query_params - Dictionary of data eventually getting sent over to Gengo.
-			post_data - Any extra special post data to get sent over.
-		"""
-		# Encoding jobs becomes a bit different than any other method call, so we catch them and do a little
-		# JSON-dumping action. Catching them also allows us to provide some sense of portability between the various
-		# job-posting methods in that they can all safely rely on passing dictionaries around. Huzzah!
-		if fn['method'] == 'POST' or fn['method'] == 'PUT':
-			if 'job' in post_data:
-				query_params['data'] = json.dumps(post_data['job'], separators = (',', ':'))
-			elif 'jobs' in post_data:
-				query_params['data'] = json.dumps(post_data['jobs'], separators = (',', ':'))
-			elif 'comment' in post_data:
-				query_params['data'] = json.dumps(post_data['comment'], separators = (',', ':'))
-			elif 'action' in post_data:
-				query_params['data'] = json.dumps(post_data['action'], separators = (',', ':'))
-			
-			query_json = json.dumps(query_params, separators = (',', ':'), sort_keys = True).replace('/', '\\/')
-			query_hmac = hmac.new(self.private_key, query_json, sha1)
-			query_params['api_sig'] = query_hmac.hexdigest()
-			query_data = urlencode(query_params)
-			
-			# Httplib2 doesn't assume this for POST requests, but in the case of the Gengo API it's a bit of a hidden necessity.
-			headers = self.headers
-			headers['Content-Type'] = 'application/x-www-form-urlencoded'
-			
-			if self.debug is True: print query_data
-			return self.client.request(base, fn['method'], headers = headers, body = query_data)
-		else:
-			query_string = urlencode(sorted(query_params.items(), key = itemgetter(0)))
-			if self.private_key is not None:
-				query_hmac = hmac.new(self.private_key, query_string, sha1)
-				query_params['api_sig'] = query_hmac.hexdigest()
-				query_string = urlencode(query_params)
-			
-			if self.debug is True: print query_string
-			return self.client.request(base + '?%s' % query_string, fn['method'], headers = self.headers)
-
 	def signAndRequestAPILatest(self, fn, base, query_params, post_data = {}):
 		"""
 			Request signatures between API v1 and later versions of the API differ greatly in
