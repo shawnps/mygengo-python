@@ -13,7 +13,17 @@
 
 """
 
+# @unittest.skip doesn't exist in Python < 2.7 so you will need unittest2 from pip in this case
+# pip install unittest2
 import unittest
+try:
+        unittest.__getattribute__('skip')
+except AttributeError:
+        try:
+                import unittest2 as unittest
+        except ImportError:
+                raise Exception("The unittest module is missing the required skip attribute. Either use Python 2.7, or `pip install unittest2`")
+
 import random
 
 from pprint import pprint
