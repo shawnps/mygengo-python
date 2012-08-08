@@ -4,7 +4,6 @@ import sys, os
 from setuptools import setup
 from setuptools import find_packages
 
-__author__ = 'Ryan McGrath <ryan@mygengo.com>'
 __version__ = '1.3.3'
 
 setup(
@@ -20,12 +19,12 @@ setup(
 	install_requires = ['simplejson'],
 
 	# Metadata for PyPI.
-	author = 'Ryan McGrath',
-	author_email = 'ryan@venodesigns.net',
+	author = 'Gengo',
+	author_email = 'api@gengo.com',
 	license = 'LGPL License',
-	url = 'http://github.com/ryanmcgrath/mygengo/tree/master',
-	keywords = 'mygengo translation language api japanese english',
-	description = 'Official Python library for interfacing with the MyGengo API.',
+	url = 'http://github.com/myGengo/mygengo-python/tree/master',
+	keywords = 'gengo translation language api japanese english',
+	description = 'Official Python library for interfacing with the Gengo API.',
 	long_description = open('README.md').read(),
 	classifiers = [
 		'Development Status :: 4 - Beta',

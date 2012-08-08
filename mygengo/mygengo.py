@@ -1,14 +1,14 @@
 #!/usr/bin/python
 
 """
-	Official Python library for interfacing with the myGengo API.
+	Official Python library for interfacing with the Gengo API.
 	It's released under a BSD-style license and totally, freely available. Check it out on Github
 	if you find any issues!
 
-	Questions, comments? ryan@mygengo.com
+	Questions, comments? alex.wainzinger@gengo.com
 """
 
-__author__ = 'Ryan McGrath <ryan@mygengo.com>'
+__author__ = 'Alex Wainzinger <alex.wainzinger@gengo.com>'
 __version__ = '1.3.3'
 
 import httplib2, mimetypes, mimetools, re, hmac
@@ -19,7 +19,7 @@ from urllib import urlencode, quote
 from time import time
 from operator import itemgetter
 
-# mockdb is a file with a dictionary of every API endpoint for myGengo.
+# mockdb is a file with a dictionary of every API endpoint for Gengo.
 from mockdb import api_urls, apihash
 
 # There are some special setups (like, oh, a Django application) where
@@ -38,11 +38,11 @@ except ImportError:
 			from django.utils import simplejson as json
 		except:
 			# Seriously wtf is wrong with you if you get this Exception.
-			raise Exception("mygengo requires the simplejson library (or Python 2.6+) to work. http://www.undefined.org/python/")
+			raise Exception("gengo requires the simplejson library (or Python 2.6+) to work. http://www.undefined.org/python/")
 
 class MyGengoError(Exception):
 	"""
-		Generic error class, catch-all for most MyGengo issues.
+		Generic error class, catch-all for most Gengo issues.
 		Special cases are handled by APILimit and AuthError.
 
 		Note: You need to explicitly import them into your code, e.g:
@@ -77,9 +77,9 @@ class MyGengo(object):
 			Instantiates an instance of MyGengo.
 			
 			Parameters:
-				public_key - Your 'public' key for myGengo. Retrieve this from your account information if you want to do authenticated calls.
-				private_key - Your 'private' key for myGengo. Retrieve this from your account information if you want to do authenticated calls.
-				sandbox - Whether to use the myGengo sandbox or not. Check with myGengo for the differences with this as it may change.
+				public_key - Your 'public' key for Gengo. Retrieve this from your account information if you want to do authenticated calls.
+				private_key - Your 'private' key for Gengo. Retrieve this from your account information if you want to do authenticated calls.
+				sandbox - Whether to use the Gengo sandbox or not. Check with Gengo for the differences with this as it may change.
 				headers - User agent header, dictionary style ala {'User-Agent': 'Bert'}
 				debug - a flag (True/False) which will cause things to properly blow the hell up on exceptions. Useful for debugging. ;P
 		"""
@@ -90,7 +90,7 @@ class MyGengo(object):
 		# If there's headers, set them, otherwise be an embarassing parent for their own good.
 		self.headers = headers
 		if self.headers is None:
-			self.headers = {'User-agent': 'myGengo Python Library; Version %s; http://mygengo.com/' % __version__}
+			self.headers = {'User-agent': 'Gengo Python Library; Version %s; http://gengo.com/' % __version__}
 		# No matter whether we get some supplied or use the generic, tell it we want JSON. ;P
 		self.headers['Accept'] = 'application/json'
 		self.debug = debug
@@ -148,7 +148,7 @@ class MyGengo(object):
 			# Build up a proper 'authenticated' url...
 			#
 			# Note: for further information on what's going on here, it's best to familiarize yourself
-			# with the myGengo authentication API. (http://mygengo.com/services/api/dev-docs/authentication)
+			# with the Gengo authentication API. (http://gengo.com/services/api/dev-docs/authentication)
 			query_params = dict([k, quote(v.encode('utf-8'))] for k, v in kwargs.items())
 			if self.public_key is not None:
 				query_params['api_key'] = self.public_key
@@ -180,7 +180,7 @@ class MyGengo(object):
 
 			fn - object mapping from mockdb describing POST, etc.
 			base - Base URL to ping.
-			query_params - Dictionary of data eventually getting sent over to myGengo.
+			query_params - Dictionary of data eventually getting sent over to Gengo.
 			post_data - Any extra special post data to get sent over.
 		"""
 		# Encoding jobs becomes a bit different than any other method call, so we catch them and do a little
@@ -201,7 +201,7 @@ class MyGengo(object):
 			query_params['api_sig'] = query_hmac.hexdigest()
 			query_data = urlencode(query_params)
 			
-			# Httplib2 doesn't assume this for POST requests, but in the case of the myGengo API it's a bit of a hidden necessity.
+			# Httplib2 doesn't assume this for POST requests, but in the case of the Gengo API it's a bit of a hidden necessity.
 			headers = self.headers
 			headers['Content-Type'] = 'application/x-www-form-urlencoded'
 			
@@ -227,7 +227,7 @@ class MyGengo(object):
 
 			fn - object mapping from mockdb describing POST, etc.
 			base - Base URL to ping.
-			query_params - Dictionary of data eventually getting sent over to myGengo.
+			query_params - Dictionary of data eventually getting sent over to Gengo.
 			post_data - Any extra special post data to get sent over.
 		"""
 		# Encoding jobs becomes a bit different than any other method call, so we catch them and do a little
@@ -248,7 +248,7 @@ class MyGengo(object):
 			query_params['api_sig'] = query_hmac.hexdigest()
 			query_data = urlencode(query_params)
 			
-			# Httplib2 doesn't assume this for POST requests, but in the case of the myGengo API it's a bit of a hidden necessity.
+			# Httplib2 doesn't assume this for POST requests, but in the case of the Gengo API it's a bit of a hidden necessity.
 			headers = self.headers
 			headers['Content-Type'] = 'application/x-www-form-urlencoded'
 			

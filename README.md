@@ -1,13 +1,13 @@
-myGengo Python Library (for the [myGengo API](http://mygengo.com/))
+Gengo Python Library (for the [Gengo API](http://gengo.com/))
 ========================================================================================================
 Translating your tools and products helps people all over the world access them; this is, of course, a
-somewhat tricky problem to solve. **[myGengo](http://mygengo.com/)** is a service that offers human-translation
+somewhat tricky problem to solve. **[Gengo](http://gengo.com/)** is a service that offers human-translation
 (which is often a higher quality than machine translation), and an API to manage sending in work and watching
 jobs. This is a python interface to make using the API simpler (some would say incredibly easy). 
 
 Installation & Requirements
 -------------------------------------------------------------------------------------------------------
-Installing myGengo is fairly simple:
+Installing Gengo is fairly simple:
 
     pip install mygengo
 
@@ -15,16 +15,16 @@ Alternatively, if you're in the stone ages:
 
     easy_install mygengo
 
-myGengo also relies on httplib2, which can be installed through either of the above methods. If
+Gengo also relies on httplib2, which can be installed through either of the above methods. If
 you're running on a version of Python prior to 2.6, you'll need to install simplejson as well.
 
-A version of myGengo for Python 3 is in the works, but as Python 3 isn't even quite deemed production
+A version of Gengo for Python 3 is in the works, but as Python 3 isn't even quite deemed production
 ready/reliable yet, it's not the highest priority at the moment.
 
 
 Tests - Running Them, etc
 ------------------------------------------------------------------------------------------------------
-myGengo has a full suite of Unit Tests. To run them, grab the source, head into the mygengo directory, 
+Gengo has a full suite of Unit Tests. To run them, grab the source, head into the mygengo directory, 
 and execute the tests file with the Python interpreter, ala:
 
     python tests.py
@@ -35,8 +35,8 @@ Question, Comments, Complaints, Praise?
 If you have questions or comments and would like to reach us directly, please feel free to do
 so at the following outlets. We love hearing from developers!
 
-Email: ryan [at] mygengo dot com  
-Twitter: **[@mygengo_dev](http://twitter.com/mygengo_dev)**  
+Email: alex [dot] wainzinger [at] gengo dot com  
+Twitter: **[@gengo_dev](http://twitter.com/gengo_dev)**  
 
 If you come across any issues, please file them on the **[Github project issue tracker](https://github.com/myGengo/mygengo-python/issues)**. Thanks!
 
@@ -60,18 +60,18 @@ print gengo.getAccountBalance()
 
 All function definitions can be found inside mygengo/mockdb.py. They exist as an uber dictionary: the
 key of the dictionary entry is the function name, and the parameters are exactly the same as specified
-over on the **[myGengo API docs](http://mygengo.com/about/services/api)**.
+over on the **[Gengo API docs](http://gengo.com/about/services/api)**.
 
 MyGengo()
 ---------------------------------------------------------------------------------------------------
-Creates an instance of MyGengo for you to communicate with the myGengo API. This needs to be done
+Creates an instance of MyGengo for you to communicate with the Gengo API. This needs to be done
 before any of the methods below are available.
 
 #### Parameters:
-- _public_key_: Required. Your public key, generated on the myGengo API site.
-- _private_key_: Required. Your private key, generated on the myGengo API site.
-- _sandbox_: Optional. Defaults to False, dictates whethe to send the call to the myGengo Sandbox API.
-- _api_version_: Optional. API version to use with myGengo (defaults to 1).
+- _public_key_: Required. Your public key, generated on the Gengo API site.
+- _private_key_: Required. Your private key, generated on the Gengo API site.
+- _sandbox_: Optional. Defaults to False, dictates whethe to send the call to the Gengo Sandbox API.
+- _api_version_: Optional. API version to use with Gengo (defaults to 1).
 - _headers_: Optional. Additional HTTP headers to send along, passed as a dictionary object.  
 
 #### Example:   
@@ -127,11 +127,11 @@ print gengo.getAccountBalance()
 
 MyGengo.postTranslationJob()
 ---------------------------------------------------------------------------------------------------
-Sends a new job over to myGengo for translation. Jobs are dictionaries that get passed around; an example is
+Sends a new job over to Gengo for translation. Jobs are dictionaries that get passed around; an example is
 below.
 
 ### Parameters:
-- _job_: Required. A dictionary containing a full job description for myGengo (**see below**).
+- _job_: Required. A dictionary containing a full job description for Gengo (**see below**).
 
 ### Example:
 ``` python    
@@ -146,7 +146,7 @@ gengo = MyGengo(
 job = {
     'type': 'text', # REQUIRED. Type to translate, you'll probably always put 'text' here. ;P
     'slug': 'Single :: English to Japanese', # REQUIRED. Slug for internally storing, can be generic.
-    'body_src': 'Testing myGengo API library calls.', # REQUIRED. The text you're translating. ;P
+    'body_src': 'Testing Gengo API library calls.', # REQUIRED. The text you're translating. ;P
     'lc_src': 'en', # REQUIRED. source_language_code (see getServiceLanguages() for a list of codes)  
     'lc_tgt': 'ja', # REQUIRED. target_language_code (see getServiceLanguages() for a list of codes)
     'tier': 'standard', # REQUIRED. tier type ("machine", "standard", "pro", or "ultra")
@@ -165,7 +165,7 @@ MyGengo.postTranslationJobs()
 Submits a job or group of jobs to translate.
 
 ### Parameters:
-- _jobs_: Required. A Dictionary of jobs and associated properties to run up to myGengo.
+- _jobs_: Required. A Dictionary of jobs and associated properties to run up to Gengo.
 
 ### Example:
 ``` python
@@ -182,7 +182,7 @@ data = {
 		'job_1': {
 			'type': 'text', # REQUIRED. Type to translate, you'll probably always put 'text' here. ;P
 			'slug': 'Single :: English to Japanese', # REQUIRED. Slug for internally storing, can be generic.
-			'body_src': 'Testing myGengo API library calls.', # REQUIRED. The text you're translating. ;P
+			'body_src': 'Testing Gengo API library calls.', # REQUIRED. The text you're translating. ;P
 			'lc_src': 'en', # REQUIRED. source_language_code (see getServiceLanguages() for a list of codes)  
 			'lc_tgt': 'ja', # REQUIRED. target_language_code (see getServiceLanguages() for a list of codes)
 			'tier': 'standard', # REQUIRED. tier type ("machine", "standard", "pro", or "ultra")
@@ -195,7 +195,7 @@ data = {
 		'job_2': {
 			'type': 'text', # REQUIRED. Type to translate, you'll probably always put 'text' here. ;P
 			'slug': 'Single :: English to Japanese', # REQUIRED. Slug for internally storing, can be generic.
-			'body_src': 'Testing myGengo API library calls.', # REQUIRED. The text you're translating. ;P
+			'body_src': 'Testing Gengo API library calls.', # REQUIRED. The text you're translating. ;P
 			'lc_src': 'en', # REQUIRED. source_language_code (see getServiceLanguages() for a list of codes)  
 			'lc_tgt': 'ja', # REQUIRED. target_language_code (see getServiceLanguages() for a list of codes)
 			'tier': 'standard', # REQUIRED. tier type ("machine", "standard", "pro", or "ultra")
@@ -222,7 +222,7 @@ Determine how much it'll cost to translate a given piece of text/copy. A method 
 it very much seems like a GET. Bears a striking similarity to MyGengo.postTranslationJobs().
 
 ### Parameters:
-- _jobs_: Required. An Dictionary of Jobs to run up to myGengo.
+- _jobs_: Required. An Dictionary of Jobs to run up to Gengo.
 
 ### Example:	
 ``` python
@@ -238,7 +238,7 @@ jobs_data = {
 	'job_1': {
        	'type': 'text', # REQUIRED. Type to translate, you'll probably always put 'text' here. ;P
         'slug': 'Single :: English to Japanese', # REQUIRED. Slug for internally storing, can be generic.
-        'body_src': 'Testing myGengo API library calls.', # REQUIRED. The text you're translating. ;P
+        'body_src': 'Testing Gengo API library calls.', # REQUIRED. The text you're translating. ;P
         'lc_src': 'en', # REQUIRED. source_language_code (see getServiceLanguages() for a list of codes)  
         'lc_tgt': 'ja', # REQUIRED. target_language_code (see getServiceLanguages() for a list of codes)
         'tier': 'standard', # REQUIRED. tier type ("machine", "standard", "pro", or "ultra")
@@ -251,7 +251,7 @@ jobs_data = {
     'job_2': {
       	'type': 'text', # REQUIRED. Type to translate, you'll probably always put 'text' here. ;P
         'slug': 'Single :: English to Japanese', # REQUIRED. Slug for internally storing, can be generic.
-        'body_src': 'Testing myGengo API library calls.', # REQUIRED. The text you're translating. ;P
+        'body_src': 'Testing Gengo API library calls.', # REQUIRED. The text you're translating. ;P
         'lc_src': 'en', # REQUIRED. source_language_code (see getServiceLanguages() for a list of codes)  
         'lc_tgt': 'ja', # REQUIRED. target_language_code (see getServiceLanguages() for a list of codes)
         'tier': 'standard', # REQUIRED. tier type ("machine", "standard", "pro", or "ultra")
@@ -286,8 +286,8 @@ None
 ### "approve" Parameters:
 - _rating_: Required. 1 - 5, 1 = ohgodwtfisthis, 5 = I want yo babies yo,
 - _for_translator_: Optional. Comments that you can pass on to the translator.
-- _for_mygengo_: Optional. Comments to send to the myGengo staff (kept private on myGengo's end)
-- _public_: Optional. 1 (true) / 0 (false, default). Whether myGengo can share this feedback publicly.
+- _for_mygengo_: Optional. Comments to send to the Gengo staff (kept private on Gengo's end)
+- _public_: Optional. 1 (true) / 0 (false, default). Whether Gengo can share this feedback publicly.
 
 ### "reject" Parameters:
 - _reason_: Required. Reason for rejection (must be "quality", "incomplete", "other")
@@ -333,8 +333,8 @@ None
 ### "approve" Parameters:
 - _rating_: Required. 1 - 5, 1 = ohgodwtfisthis, 5 = I want yo babies yo,
 - _for_translator_: Optional. Comments that you can pass on to the translator.
-- _for_mygengo_: Optional. Comments to send to the myGengo staff (kept private on myGengo's end)
-- _public_: Optional. 1 (true) / 0 (false, default). Whether myGengo can share this feedback publicly.
+- _for_mygengo_: Optional. Comments to send to the Gengo staff (kept private on Gengo's end)
+- _public_: Optional. 1 (true) / 0 (false, default). Whether Gengo can share this feedback publicly.
 
 ### "reject" Parameters:
 - _reason_: Required. Reason for rejection (must be "quality", "incomplete", "other")
@@ -633,7 +633,7 @@ gengo.getServiceLanguagePairs(lc_src = 'en')
 
 MyGengo.unicode2utf8()
 --------------------------------------------------------------------------------------------------------
-Convenience method for making sure that text is in an acceptable format for myGengo submissions.
+Convenience method for making sure that text is in an acceptable format for Gengo submissions.
 
 ### Parameters:
 - _text_: Required. Text to convert.
