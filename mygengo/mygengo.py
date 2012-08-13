@@ -142,7 +142,7 @@ class MyGengo(object):
 			# Go through and replace any mustaches that are in our API url with their appropriate key/value pairs...
 			# NOTE: We pop() here because we don't want the extra data included and messing up our hash down the road.
 			base = re.sub(
-				'\{\{(?P<m>[a-zA-Z]+)\}\}',
+				'\{\{(?P<m>[a-zA-Z_]+)\}\}',
 				lambda m: "%s" % kwargs.pop(m.group(1), 'no_argument_specified'), # In case of debugging needs
 				base_url + fn['url']
 			)
