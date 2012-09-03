@@ -3,8 +3,5 @@ python:
   - "2.7"
 # command to install dependencies
 install: "pip install -r requirements.txt --use-mirrors"
-before_script:
-  - secret=`openssl rsautl -decrypt -inkey /home/travis/.ssh/id_rsa -in secret`
-  - openssl aes-256-cbc -k "$secret" -in mygengo/test_keys.py.enc -d -a -out mygengo/test_keys.py
 # command to run tests
 script: nosetests
