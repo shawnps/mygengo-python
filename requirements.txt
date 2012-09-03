@@ -1,0 +1,5 @@
+#JSON parser
+simplejson
+
+#HTTP client library
+httplib2
