@@ -9,7 +9,7 @@
 """
 
 __author__ = 'Alex Wainzinger <alex.wainzinger@gengo.com>'
-__version__ = '1.3.3'
+__version__ = '1.3.4'
 
 import httplib2, re, hmac
 import requests
