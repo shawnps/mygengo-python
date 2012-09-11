@@ -11,16 +11,14 @@
 __author__ = 'Alex Wainzinger <alex.wainzinger@gengo.com>'
 __version__ = '1.3.3'
 
-import httplib2, mimetypes, mimetools, re, hmac
+import httplib2, re, hmac
 import requests
 
-from pprint import pprint
 from hashlib import sha1
 from urllib import urlencode, quote
 from time import time
 from operator import itemgetter
 from string import lower
-from pprint import pprint
 
 # mockdb is a file with a dictionary of every API endpoint for Gengo.
 from mockdb import api_urls, apihash
@@ -74,22 +72,25 @@ class MyGengoAuthError(MyGengoError):
 		return repr(self.msg)
 
 class MyGengo(object):
-	def __init__(self, public_key = None, private_key = None, sandbox = False, api_version = '1.1', headers = None, debug = False):
-		"""MyGengo(public_key = None, private_key = None, sandbox = False, headers = None)
+	def __init__(self, public_key = None, private_key = None, sandbox = False,
+				 api_version = '2', headers = None, debug = False):
+		"""
+		MyGengo(public_key = None, private_key = None, sandbox = False, headers = None)
 
-			Instantiates an instance of MyGengo.
+		Instantiates an instance of MyGengo.
 
-			Parameters:
-				public_key - Your 'public' key for Gengo. Retrieve this from your account information if you want to do authenticated calls.
-				private_key - Your 'private' key for Gengo. Retrieve this from your account information if you want to do authenticated calls.
-				sandbox - Whether to use the Gengo sandbox or not. Check with Gengo for the differences with this as it may change.
-				headers - User agent header, dictionary style ala {'User-Agent': 'Bert'}
-				debug - a flag (True/False) which will cause things to properly blow the hell up on exceptions. Useful for debugging. ;P
+		Parameters:
+		public_key - Your 'public' key for Gengo. Retrieve this from your account information if you want to do authenticated calls.
+		private_key - Your 'private' key for Gengo. Retrieve this from your account information if you want to do authenticated calls.
+		sandbox - Whether to use the Gengo sandbox or not. Check with Gengo for the differences with this as it may change.
+		api_version - version 2 and 1.1 are supported. defaults to 2
+		headers - User agent header, dictionary style ala {'User-Agent': 'Bert'}
+		debug - a flag (True/False) which will cause things to properly blow the hell up on exceptions. Useful for debugging. ;P
 		"""
 		self.api_url = api_urls['sandbox'] if sandbox is True else api_urls['base']
 		self.api_version = str(api_version)
-                if self.api_version not in ( '1.1', '2' ):
-                        raise Exception("mygengo-python library only supports versions 1.1 and 2 at the moment, please keep api_version to 1.1 or 2")
+		if self.api_version not in ( '1.1', '2' ):
+			raise Exception("mygengo-python library only supports versions 1.1 and 2 at the moment, please keep api_version to 1.1 or 2")
 		self.public_key = public_key
 		self.private_key = private_key
 		# If there's headers, set them, otherwise be an embarassing parent for their own good.
@@ -159,11 +160,28 @@ class MyGengo(object):
 				query_params['api_key'] = self.public_key
 			query_params['ts'] = str(int(time()))
 
+			# check whether the endpoint supports file uploads and check the
+			# params for file_path and modify the query_params accordingly
+			# needs to be refactored to a more general handling once we also want
+			# to support ie glossary upload. for now it's tied to jobs payloads
+			if 'upload' in fn:
+				file_data = {}
+				for k, j in post_data['jobs']['jobs'].iteritems():
+					if j['type'] == 'file' and 'file_path' in j:
+						file_data['file_' + k] = open(j['file_path'], 'rb')
+						j['file_key'] = 'file_' + k
+						del j['file_path']
+			else:
+				file_data = False
+
 			# If any further APIs require their own special signing needs, fork here...
-                        # For now, we are supporting 1.1 only, but 2 is desired at some point.
+			# For now, we are supporting 1.1 only, but 2 is desired at some point.
 			# resp, content = self.signAndRequestAPILatest(fn, base, query_params, post_data)
 			# results = json.loads(content)
-			results = self.signAndRequestAPILatest(fn, base, query_params, post_data).json
+			response = self.signAndRequestAPILatest(fn, base, query_params,
+                                                    post_data, file_data)
+			results = response.json
+
 
 			# See if we got any weird or odd errors back that we can cleanly raise on or something...
 			if 'opstat' in results and results['opstat'] != 'ok':
@@ -177,7 +195,8 @@ class MyGengo(object):
 		else:
 			raise AttributeError
 
-	def signAndRequestAPILatest(self, fn, base, query_params, post_data = {}):
+	def signAndRequestAPILatest(self, fn, base, query_params, post_data = {},
+								file_data = False):
 		"""
 			Request signatures between API v1 and later versions of the API differ greatly in
 			how they're done, so they're kept in separate methods for now.
@@ -204,19 +223,16 @@ class MyGengo(object):
 			elif 'action' in post_data:
 				query_params['data'] = json.dumps(post_data['action'], separators = (',', ':'))
 
-			pprint( post_data )
-
-			query_json = json.dumps(query_params, separators = (',', ':'), sort_keys = True).replace('/', '\\/')
 			query_hmac = hmac.new(self.private_key, query_params['ts'], sha1)
 			query_params['api_sig'] = query_hmac.hexdigest()
-			query_data = urlencode(query_params)
 
-			# Httplib2 doesn't assume this for POST requests, but in the case of the Gengo API it's a bit of a hidden necessity.
-			headers = self.headers
-			headers['Content-Type'] = 'application/x-www-form-urlencoded'
+			if self.debug is True:
+				print query_data
 
-			if self.debug is True: print query_data
-			return req_method( base, headers = headers, data = query_data )
+			if not file_data:
+				return req_method( base, headers = self.headers, data = query_params )
+			else:
+				return req_method( base, headers = self.headers, files = file_data, data = query_params )
 		else:
 			query_string = urlencode(sorted(query_params.items(), key = itemgetter(0)))
 			if self.private_key is not None:
@@ -224,12 +240,9 @@ class MyGengo(object):
 				query_params['api_sig'] = query_hmac.hexdigest()
 				query_string = urlencode(query_params)
 
-			if self.debug is True: print query_string
-			# return self.client.request(base + '?%s' % query_string, fn['method'], headers = self.headers)
+			if self.debug is True:
+				print base + '?%s' % query_string
 			return req_method( base + '?%s' % query_string, headers = self.headers )
-
-	def upload_file( self ):
-            pass
 
 	@staticmethod
 	def unicode2utf8(text):

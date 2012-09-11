@@ -16,7 +16,7 @@
 # at run time.
 api_urls = {
 	'sandbox': 'http://api.sandbox.mygengo.com/{{version}}',
-	'base': 'http://api.gengo.com/{{version}}'
+    'base': 'http://api.gengo.com/{{version}}',
 }
 
 # The API endpoint 'table', 'database', 'hash', 'dictionary', whatever
@@ -63,15 +63,16 @@ apihash  = {
 		'method': 'GET',
 	},
 
-        'getTranslationJobGroup': {
-                'url': '/translate/jobs/group/{{id}}',
-                'method': 'GET',
-        },
+    'getTranslationJobGroup': {
+        'url': '/translate/jobs/group/{{id}}',
+        'method': 'GET',
+    },
 
 	# Get a quote for how much a given job will cost.
 	'determineTranslationCost': {
 		'url': '/translate/service/quote',
 		'method': 'POST',
+        'upload': True, # with this being set the payload will be checked for file_path args and - if found - modified in a way so that opened file descriptors are passed to requests to do a multi part file upload. for now this is tied to jobs data only.
 	},
 
 	# Deal with comments and other metadata about a TranslationJob in progress.
@@ -114,6 +115,23 @@ apihash  = {
 	},
 	'getServiceLanguages': {
 		'url': '/translate/service/languages',
+		'method': 'GET',
+	},
+
+	# glossary stuff
+	'getGlossaryList': {
+		'url': '/translate/glossary',
+		'method': 'GET',
+	},
+
+	'getGlossary': {
+		'url': '/translate/glossary/{{id}}',
+		'method': 'GET',
+	},
+
+	# order information
+	'getTranslationOrderJobs': {
+		'url': '/translate/order/{{id}}',
 		'method': 'GET',
 	},
 }
