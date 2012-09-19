@@ -16,7 +16,7 @@
 # at run time.
 api_urls = {
 	'sandbox': 'http://api.sandbox.mygengo.com/{{version}}',
-    'base': 'http://api.gengo.com/{{version}}',
+	'base': 'http://api.gengo.com/{{version}}',
 }
 
 # The API endpoint 'table', 'database', 'hash', 'dictionary', whatever
@@ -63,10 +63,10 @@ apihash  = {
 		'method': 'GET',
 	},
 
-    'getTranslationJobGroup': {
-        'url': '/translate/jobs/group/{{id}}',
-        'method': 'GET',
-    },
+	'getTranslationJobGroup': {
+		'url': '/translate/jobs/group/{{id}}',
+		'method': 'GET',
+	},
 
 	# Get a quote for how much a given job will cost.
 	'determineTranslationCost': {
