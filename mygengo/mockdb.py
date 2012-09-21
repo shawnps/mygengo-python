@@ -1,5 +1,5 @@
 """
-	A huge map of every myGengo API endpoint to a function definition in mygengo-python.
+	A huge map of every Gengo API endpoint to a function definition in gengo-python.
 
 	Parameters that need to be embedded in the URL are treated with mustaches, e.g:
 
@@ -12,11 +12,11 @@
 	with 47, instead of defaulting to 1 (said defaulting takes place at conversion time).
 """
 
-# myGengo API urls. {{version}} gets replaced with v1/etc
+# Gengo API urls. {{version}} gets replaced with v1/etc
 # at run time.
 api_urls = {
 	'sandbox': 'http://api.sandbox.mygengo.com/{{version}}',
-	'base': 'http://api.mygengo.com/{{version}}'
+	'base': 'http://api.gengo.com/{{version}}'
 }
 
 # The API endpoint 'table', 'database', 'hash', 'dictionary', whatever
@@ -62,6 +62,11 @@ apihash  = {
 		'url': '/translate/jobs/{{id}}',
 		'method': 'GET',
 	},
+
+        'getTranslationJobGroup': {
+                'url': '/translate/jobs/group/{{id}}',
+                'method': 'GET',
+        },
 
 	# Get a quote for how much a given job will cost.
 	'determineTranslationCost': {

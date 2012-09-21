@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-	A set of tests for myGengo. They all require internet connections.
+	A set of tests for Gengo. They all require internet connections.
 	In fact, this entire library and API requires an internet connection.
 	Don't complain.
 
@@ -11,10 +11,19 @@
 	want/need to test against the regular API, modify the SANDBOX flag at the top
 	of this file.
 
-	-- Ryan McGrath (ryan @ venodesigns dat net)
 """
 
+# @unittest.skip doesn't exist in Python < 2.7 so you will need unittest2 from pip in this case
+# pip install unittest2
 import unittest
+try:
+        unittest.__getattribute__('skip')
+except AttributeError:
+        try:
+                import unittest2 as unittest
+        except ImportError:
+                raise Exception("The unittest module is missing the required skip attribute. Either use Python 2.7, or `pip install unittest2`")
+
 import random
 
 from pprint import pprint
@@ -28,12 +37,12 @@ from mygengo import MyGengo, MyGengoError, MyGengoAuthError
 # e.g, cp test_keys_example.py test_keys.py
 from test_keys import public_key, private_key
 
-# We test in the myGengo sandbox for all these tests. Flip this if you need/want to.
+# We test in the Gengo sandbox for all these tests. Flip this if you need/want to.
 SANDBOX = True
 
 class TestMyGengoCore(unittest.TestCase):
 	"""
-		Handles testing the core parts of myGengo (i.e, authentication signing, etc).
+		Handles testing the core parts of Gengo (i.e, authentication signing, etc).
 	"""
 	def test_MethodDoesNotExist(self):
 		myGengo = MyGengo(public_key = public_key, private_key = private_key, sandbox = SANDBOX)
@@ -69,7 +78,7 @@ class TestAccountMethods(unittest.TestCase):
 class TestLanguageServiceMethods(unittest.TestCase):
 	"""
 		Tests the methods that deal with getting information about language-translation
-		service support from myGengo.
+		service support from Gengo.
 	"""
 	def test_getServiceLanguagePairs(self):
 		myGengo = MyGengo(public_key = public_key, private_key = private_key, sandbox = SANDBOX)
@@ -93,7 +102,7 @@ class TestTranslationJobFlow(unittest.TestCase):
 			2: Create three jobs - 1 single, 2 batched
 			3: Update the first job with some arbitrary information or something
 			4: Post a comment on the first job
-			6: Perform a hell of a lot of GETs to the myGengo API to check stuff
+			6: Perform a hell of a lot of GETs to the Gengo API to check stuff
 			7: Delete the job if all went well (teardown phase)
 	"""
 	def setUp(self):
@@ -139,7 +148,7 @@ class TestTranslationJobFlow(unittest.TestCase):
 		
 		# If that method worked, sweet. Move on and create three jobs, store their IDs. Make sure we got an ID
 		# back, since these methods are otherwise largely useless without that returned data. These tests walk a fine
-		# line between testing myGengo and the myGengo API functionality as a whole - watch yourself if you add to this. :)
+		# line between testing Gengo and the Gengo API functionality as a whole - watch yourself if you add to this. :)
 		job = self.myGengo.postTranslationJob(job = single_job)
 		self.assertEqual(job['opstat'], 'ok')
 		self.assertIsNotNone(job['response']['job']['job_id'])
@@ -156,11 +165,11 @@ class TestTranslationJobFlow(unittest.TestCase):
 				self.assertIsNotNone(job_obj[job]['job_id'])
 				self.created_job_ids.append(job_obj[job]['job_id'])
 	
-	@unittest.skip("We don't test myGengo.getTranslationJobPreviewImage() because it's potentially resource heavy on the myGengo API.")
+	@unittest.skip("We don't test Gengo.getTranslationJobPreviewImage() because it's potentially resource heavy on the Gengo API.")
 	def test_getTranslationJobPreviewImage(self):
 		"""
 			This test could be a bit more granular, but I'm undecided at the moment - testing the response stream
-			of this method is more of a Unit Test for myGengo than myGengo. Someone can extend if they see fit, but I 
+			of this method is more of a Unit Test for Gengo than Gengo. Someone can extend if they see fit, but I 
 			currently see no reason to mess with this further.
 		"""
 		img = self.myGengo.getTranslationJobPreviewImage(id = self.created_job_ids[0])
@@ -168,11 +177,11 @@ class TestTranslationJobFlow(unittest.TestCase):
 	
 	def test_postJobDataMethods(self):
 		"""
-			Tests all the myGengo methods that deal with updating jobs, posting comments, etc. test_getJobDataMethods() checks things,
+			Tests all the Gengo methods that deal with updating jobs, posting comments, etc. test_getJobDataMethods() checks things,
 			but they need to exist first - think of this as the alcoholic mother to _getJobDataMethods().
 		"""
 		# The 'update' method can't really be tested, as it requires the translator having actually done something before
-		# it's of any use. Thing is, in automated testing, we don't really have a method to flip the switch on the myGengo end. If we
+		# it's of any use. Thing is, in automated testing, we don't really have a method to flip the switch on the Gengo end. If we
 		# WERE to test this method, it'd look a little something like this:
 		#	
 		#	updated_job = self.myGengo.updateTranslationJob(id = self.created_job_ids[0], action = {
@@ -187,7 +196,7 @@ class TestTranslationJobFlow(unittest.TestCase):
 	
 	def test_getJobDataMethods(self):
 		"""
-			Test a ton of methods that GET data from the myGengo API, based on the jobs we've created and such.
+			Test a ton of methods that GET data from the Gengo API, based on the jobs we've created and such.
 			
 			These are separate from the other GET request methods because this might be a huge nuisance to their API,
 			and I figure it's worth separating out the pain-point test cases so they could be disabled easily in a 
