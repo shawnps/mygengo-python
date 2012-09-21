@@ -1,5 +1,2 @@
-#JSON parser
-simplejson
-
-#HTTP client library
-httplib2
+# to make - well... requests
+requests=0.14.0
