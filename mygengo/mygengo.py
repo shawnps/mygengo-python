@@ -227,7 +227,7 @@ class MyGengo(object):
 			query_params['api_sig'] = query_hmac.hexdigest()
 
 			if self.debug is True:
-				print query_data
+				print query_params
 
 			if not file_data:
 				return req_method( base, headers = self.headers, data = query_params )
