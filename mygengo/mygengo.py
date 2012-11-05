@@ -12,7 +12,6 @@ Questions, comments? alex.wainzinger@gengo.com
 __author__ = 'Alex Wainzinger <alex.wainzinger@gengo.com>'
 __version__ = '1.3.4'
 
-import httplib2
 import re
 import hmac
 import requests
@@ -123,7 +122,6 @@ class MyGengo(object):
         # it we want JSON. ;P
         self.headers['Accept'] = 'application/json'
         self.debug = debug
-        # self.client = httplib2.Http()
 
     def __getattr__(self, api_call):
         """
