@@ -1,12 +1,12 @@
 #!/usr/bin/python
 
 """
-    Official Python library for interfacing with the Gengo API.
-    It's released under a BSD-style license and totally, freely available.
-    Check it out on Github
-    if you find any issues!
+Official Python library for interfacing with the Gengo API.
+It's released under a BSD-style license and totally, freely available.
+Check it out on Github
+if you find any issues!
 
-    Questions, comments? alex.wainzinger@gengo.com
+Questions, comments? alex.wainzinger@gengo.com
 """
 
 __author__ = 'Alex Wainzinger <alex.wainzinger@gengo.com>'
