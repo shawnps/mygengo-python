@@ -51,12 +51,12 @@ except ImportError:
 
 class MyGengoError(Exception):
     """
-        Generic error class, catch-all for most Gengo issues.
-        Special cases are handled by APILimit and AuthError.
+    Generic error class, catch-all for most Gengo issues.
+    Special cases are handled by APILimit and AuthError.
 
-        Note: You need to explicitly import them into your code, e.g:
+    Note: You need to explicitly import them into your code, e.g:
 
-        from mygengo import MyGengoError, MyGengoAuthError
+    from mygengo import MyGengoError, MyGengoAuthError
     """
     def __init__(self, msg, error_code=None):
         self.msg = msg
@@ -71,8 +71,8 @@ class MyGengoError(Exception):
 
 class MyGengoAuthError(MyGengoError):
     """
-        Raised when you try to access a protected resource and it fails due
-        to some issue with your authentication.
+    Raised when you try to access a protected resource and it fails due
+    to some issue with your authentication.
     """
     def __init__(self, msg):
         self.msg = msg
@@ -127,30 +127,30 @@ class MyGengo(object):
 
     def __getattr__(self, api_call):
         """
-            The most magically awesome block of code you'll ever see.
+        The most magically awesome block of code you'll ever see.
 
-            Rather than list out 9 million methods for this API, we just
-            keep a table (see above) of every API endpoint and their
-            corresponding function id for this library. This pretty much
-            gives unlimited flexibility in API support - there's a slight
-            chance of a performance hit here, but if this is
-            going to be your bottleneck... well, don't use Python. ;P
+        Rather than list out 9 million methods for this API, we just
+        keep a table (see above) of every API endpoint and their
+        corresponding function id for this library. This pretty much
+        gives unlimited flexibility in API support - there's a slight
+        chance of a performance hit here, but if this is
+        going to be your bottleneck... well, don't use Python. ;P
 
-            For those who don't get what's going on here, Python classes
-            have this great feature known as __getattr__().
-            It's called when an attribute that was called on an object
-            doesn't seem to exist - since it doesn't exist,
-            we can take over and find the API method in our table. We then
-            return a function that downloads and parses
-            what we're looking for, based on the key/values passed in.
+        For those who don't get what's going on here, Python classes
+        have this great feature known as __getattr__().
+        It's called when an attribute that was called on an object
+        doesn't seem to exist - since it doesn't exist,
+        we can take over and find the API method in our table. We then
+        return a function that downloads and parses
+        what we're looking for, based on the key/values passed in.
 
-            I'll hate myself for saying this, but this is heavily inspired
-            by Ruby's "method_missing".
+        I'll hate myself for saying this, but this is heavily inspired
+        by Ruby's "method_missing".
 
-            Note: I'm largely borrowing this technique from another API
-            library/wrapper I've written in the past (Twython).
-            If you happen to read both sources and find the same text...
-            well, that's why. ;)
+        Note: I'm largely borrowing this technique from another API
+        library/wrapper I've written in the past (Twython).
+        If you happen to read both sources and find the same text...
+        well, that's why. ;)
         """
         def get(self, **kwargs):
             # Grab the (hopefully) existing method 'definition' to fire off
@@ -251,18 +251,18 @@ class MyGengo(object):
     def signAndRequestAPILatest(self, fn, base, query_params, post_data={},
                                 file_data=False):
         """
-            Request signatures between API v1 and later versions of the API
-            differ greatly in how they're done, so they're kept in separate
-            methods for now.
+        Request signatures between API v1 and later versions of the API
+        differ greatly in how they're done, so they're kept in separate
+        methods for now.
 
-            This method signs the request with just the timestamp and
-            private key, which is what api v1.1 relies on.
+        This method signs the request with just the timestamp and
+        private key, which is what api v1.1 relies on.
 
-            fn - object mapping from mockdb describing POST, etc.
-            base - Base URL to ping.
-            query_params - Dictionary of data eventually getting sent over
-            to Gengo.
-            post_data - Any extra special post data to get sent over.
+        fn - object mapping from mockdb describing POST, etc.
+        base - Base URL to ping.
+        query_params - Dictionary of data eventually getting sent over
+        to Gengo.
+        post_data - Any extra special post data to get sent over.
         """
         # Encoding jobs becomes a bit different than any other method call,
         # so we catch them and do a little
