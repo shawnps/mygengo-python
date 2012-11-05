@@ -40,7 +40,7 @@ If you have questions or comments and would like to reach us directly, please fe
 so at the following outlets. We love hearing from developers!
 
 Email: api [at] gengo dot com
-Twitter: **[@gengo_it](https://twitter.com/gengo_it)**
+Twitter: **[@gengoit](https://twitter.com/gengoit)**
 
 If you come across any issues, please file them on the **[Github project issue tracker](https://github.com/myGengo/mygengo-python/issues)**. Thanks!
 
