@@ -1,15 +1,19 @@
 """
-    A huge map of every Gengo API endpoint to a function definition in gengo-python.
+A huge map of every Gengo API endpoint to a function definition in gengo-
+python.
 
-    Parameters that need to be embedded in the URL are treated with mustaches, e.g:
+Parameters that need to be embedded in the URL are treated with mustaches,
+e.g:
 
-    {{bert}}, etc
+{{bert}}, etc
 
-    When creating new endpoint definitions, keep in mind that the name of the mustache
-    will be replaced with the keyword that gets passed in to the function at call time.
+When creating new endpoint definitions, keep in mind that the name of the
+mustache will be replaced with the keyword that gets passed in to the
+function at call time.
 
-    i.e, in this case, if I pass bert = 47 to any function, {{bert}} will be replaced
-    with 47, instead of defaulting to 1 (said defaulting takes place at conversion time).
+i.e, in this case, if I pass bert = 47 to any function, {{bert}} will be
+replaced with 47, instead of defaulting to 1 (said defaulting takes place
+at conversion time).
 """
 
 # Gengo API urls. {{version}} gets replaced with v1/etc
@@ -20,9 +24,9 @@ api_urls = {
 }
 
 # The API endpoint 'table', 'database', 'hash', 'dictionary', whatever
-# you'd like to call it. To keep things uber nice and organized, we secure away
-# all the endpoints here with easily replaceable scenarios. Win!
-apihash  = {
+# you'd like to call it. To keep things uber nice and organized, we secure
+# away all the endpoints here with easily replaceable scenarios. Win!
+apihash = {
     # All Account-information based methods...
     'getAccountStats': {
         'url': '/account/stats',
@@ -72,10 +76,14 @@ apihash  = {
     'determineTranslationCost': {
         'url': '/translate/service/quote',
         'method': 'POST',
-        'upload': True, # with this being set the payload will be checked for file_path args and - if found - modified in a way so that opened file descriptors are passed to requests to do a multi part file upload. for now this is tied to jobs data only.
+        'upload': True,  # with this being set the payload will be checked
+        # for file_path args and - if found - modified in a way so that
+        # opened file descriptors are passed to requests to do a multi part
+        # file upload. for now this is tied to jobs data only.
     },
 
-    # Deal with comments and other metadata about a TranslationJob in progress.
+    # Deal with comments and other metadata about a TranslationJob in
+    # progress.
     'postTranslationJobComment': {
         'url': '/translate/job/{{id}}/comment',
         'method': 'POST',
