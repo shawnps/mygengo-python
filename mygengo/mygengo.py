@@ -12,7 +12,6 @@ Questions, comments? alex.wainzinger@gengo.com
 __author__ = 'Alex Wainzinger <alex.wainzinger@gengo.com>'
 __version__ = '1.3.4'
 
-import httplib2
 import re
 import hmac
 import requests
@@ -32,16 +31,19 @@ from mockdb import api_urls, apihash
 try:
     # Python 2.6 and up
     import json
+    json # silence pyflakes
 except ImportError:
     try:
         # Python 2.6 and below (2.4/2.5, 2.3 is not guranteed to work with
         # this library to begin with)
         import simplejson as json
+        json # silence pyflakes
     except ImportError:
         try:
             # This case gets rarer by the day, but if we need to, we can
             # pull it from Django provided it's there.
             from django.utils import simplejson as json
+            json # silence pyflakes
         except:
             # Seriously wtf is wrong with you if you get this Exception.
             raise Exception("gengo requires the simplejson library (or " +
@@ -123,7 +125,6 @@ class MyGengo(object):
         # it we want JSON. ;P
         self.headers['Accept'] = 'application/json'
         self.debug = debug
-        # self.client = httplib2.Http()
 
     def __getattr__(self, api_call):
         """
@@ -173,11 +174,6 @@ class MyGengo(object):
                 post_data['action'] = kwargs.pop('action')
             if 'job_ids' in kwargs:
                 post_data['job_ids'] = kwargs.pop('job_ids')
-
-            # This is for the one-off GET call that acts like a POST
-            # call... don't ask. ;P
-            if 'ids' in kwargs:
-                kwargs['ids'] = '/%s' % ','.join(map(lambda i: str(i), ids))
 
             # Set up a true base URL, abstracting away the need to care
             # about the sandbox mode
