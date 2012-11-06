@@ -28,10 +28,8 @@ except AttributeError:
                                 " Python 2.7, or `pip install unittest2`")
 
 import random
-import os
 import time
 
-from pprint import pprint
 from mygengo import MyGengo, MyGengoError, MyGengoAuthError
 
 # test_keys is a file I use to store my keys separately. It's stuck in the
@@ -640,7 +638,8 @@ class TestGlossaryFunctions(unittest.TestCase):
                    "supported via the API) this test does not make a " +
                    " lot of sense.")
     def test_getGlossary(self):
-        resp = self.myGengo.getGlossary(id=42)
+        pass
+        #resp = self.myGengo.getGlossary(id=42)
 
 
 if __name__ == '__main__':
