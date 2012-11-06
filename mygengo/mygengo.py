@@ -175,11 +175,6 @@ class MyGengo(object):
             if 'job_ids' in kwargs:
                 post_data['job_ids'] = kwargs.pop('job_ids')
 
-            # This is for the one-off GET call that acts like a POST
-            # call... don't ask. ;P
-            if 'ids' in kwargs:
-                kwargs['ids'] = '/%s' % ','.join(map(lambda i: str(i), ids))
-
             # Set up a true base URL, abstracting away the need to care
             # about the sandbox mode
             # or API versioning at this stage.
