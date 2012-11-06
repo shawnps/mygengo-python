@@ -27,19 +27,14 @@ except AttributeError:
                                 "required skip attribute. Either use " +
                                 " Python 2.7, or `pip install unittest2`")
 
+import os
 import random
 import time
 
 from mygengo import MyGengo, MyGengoError, MyGengoAuthError
 
-# test_keys is a file I use to store my keys separately. It's stuck in the
-# .gitignore as well, so feel free to use it for your own purposes, but
-# there's no warranty with this. Keys are needed to run the tests below,
-# though, so if want to run the tests, copy over the example keys file and
-# throw your information in.
-#
-# e.g, cp test_keys_example.py test_keys.py
-from test_keys import public_key, private_key
+API_PUBKEY = os.getenv('GENGO_PUBKEY')
+API_PRIVKEY = os.getenv('GENGO_PRIVKEY')
 
 # We test in the Gengo sandbox for all these tests. Flip this if you need/
 # want to.
@@ -52,8 +47,8 @@ class TestMyGengoCore(unittest.TestCase):
     signing, etc).
     """
     def test_MethodDoesNotExist(self):
-        myGengo = MyGengo(public_key=public_key,
-                          private_key=private_key,
+        myGengo = MyGengo(public_key=API_PUBKEY,
+                          private_key=API_PRIVKEY,
                           sandbox=SANDBOX)
         # With how we do functions, AttributeError is a bit tricky to
         # catch...
@@ -78,18 +73,16 @@ class TestAccountMethods(unittest.TestCase):
     the account you're authenticating as. Checks for one property on
     each method; if your keys work with these methods, well...
     """
+    def setUp(self):
+        self.myGengo = MyGengo(public_key=API_PUBKEY,
+                               private_key=API_PRIVKEY,
+                               sandbox=SANDBOX)
     def test_getAccountStats(self):
-        myGengo = MyGengo(public_key=public_key,
-                          private_key=private_key,
-                          sandbox=SANDBOX)
-        stats = myGengo.getAccountStats()
+        stats = self.myGengo.getAccountStats()
         self.assertEqual(stats['opstat'], 'ok')
 
     def test_getAccountBalance(self):
-        myGengo = MyGengo(public_key=public_key,
-                          private_key=private_key,
-                          sandbox=SANDBOX)
-        balance = myGengo.getAccountBalance()
+        balance = self.myGengo.getAccountBalance()
         self.assertEqual(balance['opstat'], 'ok')
 
 
@@ -98,18 +91,16 @@ class TestLanguageServiceMethods(unittest.TestCase):
     Tests the methods that deal with getting information about language-
     translation service support from Gengo.
     """
+    def setUp(self):
+        self.myGengo = MyGengo(public_key=API_PUBKEY,
+                               private_key=API_PRIVKEY,
+                               sandbox=SANDBOX)
     def test_getServiceLanguagePairs(self):
-        myGengo = MyGengo(public_key=public_key,
-                          private_key=private_key,
-                          sandbox=SANDBOX)
-        resp = myGengo.getServiceLanguagePairs()
+        resp = self.myGengo.getServiceLanguagePairs()
         self.assertEqual(resp['opstat'], 'ok')
 
     def test_getServiceLanguages(self):
-        myGengo = MyGengo(public_key=public_key,
-                          private_key=private_key,
-                          sandbox=SANDBOX)
-        resp = myGengo.getServiceLanguages()
+        resp = self.myGengo.getServiceLanguages()
         self.assertEqual(resp['opstat'], 'ok')
 
 
@@ -136,8 +127,8 @@ class TestTranslationSingleJobFlow(unittest.TestCase):
         """
         # First we'll create three jobs - one regular, and two at the same
         # time...
-        self.myGengo = MyGengo(public_key=public_key,
-                               private_key=private_key,
+        self.myGengo = MyGengo(public_key=API_PUBKEY,
+                               private_key=API_PRIVKEY,
                                sandbox=SANDBOX)
         self.created_job_ids = []
 
@@ -270,8 +261,8 @@ class TestTranslationJobFlowFileUpload(unittest.TestCase):
         """
         # First we'll create three jobs - one regular, and two at the same
         # time...
-        self.myGengo = MyGengo(public_key=public_key,
-                               private_key=private_key,
+        self.myGengo = MyGengo(public_key=API_PUBKEY,
+                               private_key=API_PRIVKEY,
                                api_version='2',
                                sandbox=SANDBOX)
         self.created_job_ids = []
@@ -443,8 +434,8 @@ class TestTranslationJobFlowMixedOrder(unittest.TestCase):
         """
         # First we'll create three jobs - one regular, and two at the same
         # time...
-        self.myGengo = MyGengo(public_key=public_key,
-                               private_key=private_key,
+        self.myGengo = MyGengo(public_key=API_PUBKEY,
+                               private_key=API_PRIVKEY,
                                api_version='2',
                                sandbox=SANDBOX)
         self.created_job_ids = []
@@ -626,8 +617,8 @@ class TestGlossaryFunctions(unittest.TestCase):
         """
         # First we'll create three jobs - one regular, and two at the same
         # time...
-        self.myGengo = MyGengo(public_key=public_key,
-                               private_key=private_key,
+        self.myGengo = MyGengo(public_key=API_PUBKEY,
+                               private_key=API_PRIVKEY,
                                sandbox=SANDBOX)
 
     def test_getGlossaryList(self):
