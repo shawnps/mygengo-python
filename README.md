@@ -54,9 +54,9 @@ a working script with the following:
 from mygengo import MyGengo
 
 gengo = MyGengo(
-    public_key = 'your_public_key',
-    private_key = 'your_private_key',
-    sandbox = True, # possibly false, depending on your dev needs
+    public_key='your_public_key',
+    private_key='your_private_key',
+    sandbox=True,  # possibly false, depending on your dev needs
 )
 
 print gengo.getAccountBalance()
