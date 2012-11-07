@@ -77,6 +77,7 @@ class TestAccountMethods(unittest.TestCase):
         self.myGengo = MyGengo(public_key=API_PUBKEY,
                                private_key=API_PRIVKEY,
                                sandbox=SANDBOX)
+        self.myGengo.api_url = 'http://api.staging.gengo.com/{{version}}'
     def test_getAccountStats(self):
         stats = self.myGengo.getAccountStats()
         self.assertEqual(stats['opstat'], 'ok')
@@ -95,6 +96,7 @@ class TestLanguageServiceMethods(unittest.TestCase):
         self.myGengo = MyGengo(public_key=API_PUBKEY,
                                private_key=API_PRIVKEY,
                                sandbox=SANDBOX)
+        self.myGengo.api_url = 'http://api.staging.gengo.com/{{version}}'
     def test_getServiceLanguagePairs(self):
         resp = self.myGengo.getServiceLanguagePairs()
         self.assertEqual(resp['opstat'], 'ok')
@@ -130,6 +132,7 @@ class TestTranslationSingleJobFlow(unittest.TestCase):
         self.myGengo = MyGengo(public_key=API_PUBKEY,
                                private_key=API_PRIVKEY,
                                sandbox=SANDBOX)
+        self.myGengo.api_url = 'http://api.staging.gengo.com/{{version}}'
         self.created_job_ids = []
 
         single_job = {
@@ -264,6 +267,7 @@ class TestTranslationJobFlowFileUpload(unittest.TestCase):
         self.myGengo = MyGengo(public_key=API_PUBKEY,
                                private_key=API_PRIVKEY,
                                sandbox=SANDBOX)
+        self.myGengo.api_url = 'http://api.staging.gengo.com/{{version}}'
         self.created_job_ids = []
 
         multiple_jobs_quote = {
@@ -436,6 +440,7 @@ class TestTranslationJobFlowMixedOrder(unittest.TestCase):
         self.myGengo = MyGengo(public_key=API_PUBKEY,
                                private_key=API_PRIVKEY,
                                sandbox=SANDBOX)
+        self.myGengo.api_url = 'http://api.staging.gengo.com/{{version}}'
         self.created_job_ids = []
 
         multiple_jobs_quote = {
@@ -618,6 +623,7 @@ class TestGlossaryFunctions(unittest.TestCase):
         self.myGengo = MyGengo(public_key=API_PUBKEY,
                                private_key=API_PRIVKEY,
                                sandbox=SANDBOX)
+        self.myGengo.api_url = 'http://api.staging.gengo.com/{{version}}'
 
     def test_getGlossaryList(self):
         resp = self.myGengo.getGlossaryList()
