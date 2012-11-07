@@ -263,7 +263,6 @@ class TestTranslationJobFlowFileUpload(unittest.TestCase):
         # time...
         self.myGengo = MyGengo(public_key=API_PUBKEY,
                                private_key=API_PRIVKEY,
-                               api_version='2',
                                sandbox=SANDBOX)
         self.created_job_ids = []
 
@@ -436,7 +435,6 @@ class TestTranslationJobFlowMixedOrder(unittest.TestCase):
         # time...
         self.myGengo = MyGengo(public_key=API_PUBKEY,
                                private_key=API_PRIVKEY,
-                               api_version='2',
                                sandbox=SANDBOX)
         self.created_job_ids = []
 
