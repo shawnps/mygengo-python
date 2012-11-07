@@ -12,4 +12,4 @@ gengo = MyGengo(
 
 # Think of this as a "search my jobs" method, and it becomes very
 # self-explanatory.
-print gengo.getTranslationJobs(status="unpaid", count=15)
+print gengo.getTranslationJobs(status="accepted", count=15)
