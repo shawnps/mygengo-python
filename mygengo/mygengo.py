@@ -198,7 +198,7 @@ class MyGengo(object):
             # Note: for further information on what's going on here, it's
             # best to familiarize yourself  with the Gengo authentication
             # API. (http://gengo.com/services/api/dev-docs/authentication)
-            query_params = dict([k, quote(v.encode('utf-8'))] for k, v
+            query_params = dict([k, quote(str(v).encode('utf-8'))] for k, v
                                 in kwargs.items())
             if self.public_key is not None:
                 query_params['api_key'] = self.public_key
