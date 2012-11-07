@@ -1,9 +1,15 @@
 language: python
 python:
   - "2.7"
+
+env:
+  global:
+    - secure: "ih7F8VD5AwdPgxtwwU5qCHkvozAnlaleBUhpm0WyhNdakLbNw/xf1jX9GJOC\nNBcEplvA9TZBVQldKobKjZe98krfDYVyaptwudNMezQWMjuaJgN45uOaTxCr\ntYUTJet9fNDrZlL3w2F46jFopzYyHS/s99JduauOgRVBeQDs7bU="
+    - secure: "h7Sa8E6mZyI+H9sJMAUU5y4AFiE5cVKGWOZMzQBItFEL6HjIRxtHDJlXGlcS\nPapsO7ZMfGBEpyi+FyQjIpJtlIvTrs35nVWUXYiU2lD5luZ1WDWMPIfqMCvP\npa+G8qkGUkh2yVIzOgSrwmGw/GSt20GgIskxBzPbD9//NxhPP44="
+
 # command to install dependencies
 install: "pip install -r requirements.txt --use-mirrors"
 # command to run pep8
-before_script:  python setup.py pep8
+before_script: python setup.py pep8
 # command to run tests
-script: nosetests
+script: python mygengo/tests.py
