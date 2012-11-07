@@ -70,6 +70,7 @@ class TestAccountMethods(unittest.TestCase):
         self.myGengo = MyGengo(public_key=API_PUBKEY,
                                private_key=API_PRIVKEY)
         self.myGengo.api_url = 'http://api.staging.gengo.com/{{version}}'
+
     def test_getAccountStats(self):
         stats = self.myGengo.getAccountStats()
         self.assertEqual(stats['opstat'], 'ok')
