@@ -50,14 +50,14 @@ flag at the top of this file.
 # pip install unittest2
 import unittest
 try:
-        unittest.__getattribute__('skip')
+    unittest.__getattribute__('skip')
 except AttributeError:
-        try:
-                import unittest2 as unittest
-        except ImportError:
-                raise Exception("The unittest module is missing the " +
-                                "required skip attribute. Either use " +
-                                " Python 2.7, or `pip install unittest2`")
+    try:
+        import unittest2 as unittest
+    except ImportError:
+        raise Exception("The unittest module is missing the " +
+                        "required skip attribute. Either use " +
+                        " Python 2.7, or `pip install unittest2`")
 
 import os
 import random
