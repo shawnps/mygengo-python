@@ -29,8 +29,14 @@ ready/reliable yet, it's not the highest priority at the moment.
 
 Tests - Running Them, etc
 ------------------------------------------------------------------------------------------------------
-Gengo has a full suite of Unit Tests. To run them, grab the source, head into the mygengo directory,
-and execute the tests file with the Python interpreter, ala:
+Gengo has a full suite of Unit Tests. To run them, export your public and private keys in the shell like:
+
+```shell
+export GENGO_PUBKEY='your public key here'
+export GENGO_PRIVKEY='your public key here'
+```
+
+Then grab the source, head into the mygengo directory, and execute the tests file with the Python interpreter, ala:
 
     python tests.py
 
