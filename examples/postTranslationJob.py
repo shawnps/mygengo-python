@@ -14,7 +14,7 @@ gengo = MyGengo(
 gengo.postTranslationJob(job = {
     'type': 'text', # REQUIRED. Type to translate, you'll probably always put 'text' here. ;P
     'slug': 'Single :: English to Japanese', # REQUIRED. Slug for internally storing, can be generic.
-    'body_src': 'Testing myGengo API library calls.', # REQUIRED. The text you're translating. ;P
+    'body_src': 'Testing Gengo API library calls.', # REQUIRED. The text you're translating. ;P
     'lc_src': 'en', # REQUIRED. source_language_code (see getServiceLanguages() for a list of codes)
     'lc_tgt': 'ja', # REQUIRED. target_language_code (see getServiceLanguages() for a list of codes)
     'tier': 'standard', # REQUIRED. tier type ("machine", "standard", "pro", or "ultra")
