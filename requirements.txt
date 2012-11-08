@@ -1,2 +1,2 @@
-# to make - well... requests
-requests=0.14.0
+requests
+pep8
