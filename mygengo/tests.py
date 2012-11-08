@@ -29,7 +29,7 @@ except AttributeError:
 
 import os
 import random
-import time
+#import time
 
 from mygengo import MyGengo, MyGengoError, MyGengoAuthError
 
