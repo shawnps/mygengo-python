@@ -1,3 +1,5 @@
+[![Build Status](https://secure.travis-ci.org/myGengo/mygengo-python.png)](http://travis-ci.org/myGengo/mygengo-python)
+
 Gengo Python Library (for the [Gengo API](http://gengo.com/))
 ========================================================================================================
 Translating your tools and products helps people all over the world access them; this is, of course, a
