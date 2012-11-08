@@ -38,10 +38,10 @@ It's released under a BSD-style license and totally, freely available.
 Check it out on Github
 if you find any issues!
 
-Questions, comments? alex.wainzinger@gengo.com
+Questions, comments? shawn.smith@gengo.com
 """
 
-__author__ = 'Alex Wainzinger <alex.wainzinger@gengo.com>'
+__author__ = 'Shawn Smith <shawn.smith@gengo.com>'
 __version__ = '1.3.4'
 
 import re
