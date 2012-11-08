@@ -4,8 +4,8 @@ python:
 
 env:
   global:
-    - secure: "KSP3iis79pfq91ZG9yjSWluKozPHR47P2A+yxaoPk6dcLmXshNV2DeHojiTz\nk948EIv8y7RHhBUJg8tmz0bThnbVDrdpQi8RjeBE5Ly9DUMLLm/rgLZru2Ox\ndo0Eu4gufEqyjauJNDzU0pdQRuqKOPLBoOMOsw3aZeVhOl9MDrg="
-    - GENGO_PUBKEY='(^zMpWLO3ksM3z]x2FGZS^]Oc8jt}UFZgl^{RsNA3Xyyc{oy9-#4IIg1@G-tCss2'
+    - secure: "d416hNc96tFt33zvBi/pb2Y+0fsjknNuaYFjTmZ27muYRQRo90aL8n7weLaM\nK8WMtR0+BxFCKaIpaTWleXRzAUHvpmfV1Ofp9ZQ3OBSKryIhm64rd5EGJNvX\njEnYfINlGRdjXMAdaBvQIjKuJdqMB1Z83N3Ci9P3a/nN4NB2oOg="
+    - GENGO_PUBKEY='pubkeyfortests'
 
 # command to install dependencies
 install: "pip install -r requirements.txt --use-mirrors"
