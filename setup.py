@@ -93,7 +93,7 @@ setup(
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: MIT License',
+        'License :: OSI Approved :: BSD 3-Clause License',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: Internet'
     ]
