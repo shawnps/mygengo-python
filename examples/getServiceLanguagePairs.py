@@ -40,7 +40,7 @@ from gengo import Gengo
 gengo = Gengo(
     public_key='your_public_key',
     private_key='your_private_key',
-    sandbox=False,  
+    sandbox=False,
     debug=True
 )
 # Useful for figuring out what language paths are supported - e.g, if

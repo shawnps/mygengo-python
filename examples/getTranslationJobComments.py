@@ -39,7 +39,7 @@ from gengo import Gengo
 gengo = Gengo(
     public_key='your_public_key',
     private_key='your_private_key',
-    sandbox=True, 
+    sandbox=True,
 )
 
 # Get all the comments on a specific job.

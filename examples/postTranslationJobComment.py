@@ -39,7 +39,7 @@ from gengo import Gengo
 gengo = Gengo(
     public_key='your_public_key',
     private_key='your_private_key',
-    sandbox=True, 
+    sandbox=True,
 )
 
 # Post a comment on a specific job; perhaps you have an update for the

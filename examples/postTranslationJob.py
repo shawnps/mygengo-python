@@ -39,11 +39,11 @@ from gengo import Gengo
 gengo = Gengo(
     public_key='your_public_key',
     private_key='your_private_key',
-    sandbox=True, 
+    sandbox=True,
 )
 
 # Post over a job for translation.
-gengo.postTranslationJob(job = {
+gengo.postTranslationJob(job={
     'type': 'text', # REQUIRED. Type to translate, you'll probably always put 'text' here. ;P
     'slug': 'Single :: English to Japanese', # REQUIRED. Slug for internally storing, can be generic.
     'body_src': 'Testing Gengo API library calls.', # REQUIRED. The text you're translating. ;P

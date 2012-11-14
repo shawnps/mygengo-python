@@ -39,7 +39,7 @@ from gengo import Gengo
 gengo = Gengo(
     public_key='your_public_key',
     private_key='your_private_key',
-    sandbox=True, 
+    sandbox=True,
 )
 
 # Very much like grabbing a comment history. Returns a data set, iterate
