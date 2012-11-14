@@ -123,8 +123,7 @@ class Gengo(object):
         account information if you want to do authenticated calls.
         private_key - Your 'private' key for Gengo. Retrieve this from your
         account information if you want to do authenticated calls.
-        sandbox - Whether to use the Gengo sandbox or not. Check with Gengo
-        for the differences with this as it may change.
+        sandbox - Whether to use the Gengo sandbox.
         api_version - version 2 and 1.1 are supported. defaults to 2
         headers - User agent header, dictionary style ala {'User-Agent':
         'Bert'}
@@ -198,8 +197,7 @@ class Gengo(object):
                 post_data['job_ids'] = kwargs.pop('job_ids')
 
             # Set up a true base URL, abstracting away the need to care
-            # about the sandbox mode
-            # or API versioning at this stage.
+            # about the sandbox mode or API versioning at this stage.
             base_url = self.api_url.replace('{{version}}',
                                             'v%s' % self.api_version)
 
@@ -243,11 +241,6 @@ class Gengo(object):
 
             # If any further APIs require their own special signing needs,
             # fork here...
-            # For now, we are supporting 1.1 only, but 2 is desired at some
-            # point.
-            # resp, content = self.signAndRequestAPILatest(fn, base,
-            # query_params, post_data)
-            # results = json.loads(content)
             response = self.signAndRequestAPILatest(fn, base, query_params,
                                                     post_data, file_data)
             results = response.json
@@ -278,12 +271,8 @@ class Gengo(object):
     def signAndRequestAPILatest(self, fn, base, query_params, post_data={},
                                 file_data=False):
         """
-        Request signatures between API v1 and later versions of the API
-        differ greatly in how they're done, so they're kept in separate
-        methods for now.
-
         This method signs the request with just the timestamp and
-        private key, which is what api v1.1 relies on.
+        private key, which is what api v1.1 and 2 rely on.
 
         fn - object mapping from mockdb describing POST, etc.
         base - Base URL to ping.
