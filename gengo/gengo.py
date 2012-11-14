@@ -198,8 +198,8 @@ class Gengo(object):
 
             # Set up a true base URL, abstracting away the need to care
             # about the sandbox mode or API versioning at this stage.
-            base_url = self.api_url.replace('{{version}}',
-                                            'v%s' % self.api_version)
+            base_url = self.api_url % {'version':
+                                       'v%s' % self.api_version}
 
             # Go through and replace any mustaches that are in our API url
             # with their appropriate key/value pairs...
