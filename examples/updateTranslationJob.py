@@ -39,7 +39,7 @@ from gengo import Gengo
 gengo = Gengo(
     public_key='your_public_key',
     private_key='your_private_key',
-    sandbox=True,, 
+    sandbox=True, 
 )
 
 # Update a job that has an id of 42, and reject it, cite the reason,
