@@ -33,14 +33,14 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from mygengo import MyGengo
+from gengo import Gengo
 
-# Get an instance of MyGengo to work with...
+# Get an instance of Gengo to work with...
 
-gengo = MyGengo(
+gengo = Gengo(
     public_key='your_public_key',
     private_key='your_private_key',
-    sandbox=False,  # possibly false, depending on your dev needs
+    sandbox=False,  
     debug=True
 )
 # Useful for figuring out what language paths are supported - e.g, if

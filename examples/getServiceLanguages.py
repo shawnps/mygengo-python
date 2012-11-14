@@ -33,14 +33,14 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from mygengo import MyGengo
+from gengo import Gengo
 from pprint import pprint
 
-mygengo = MyGengo(
+gengo = Gengo(
     public_key='your public key',
     private_key='your private key',
-    sandbox=False
+    sandbox=False,
 )
 
 # Pretty-print a list of every supported language
-pprint(mygengo.getServiceLanguages())
+pprint(gengo.getServiceLanguages())

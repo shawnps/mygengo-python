@@ -77,27 +77,27 @@ except ImportError:
                             "http://www.undefined.org/python/")
 
 
-class MyGengoError(Exception):
+class GengoError(Exception):
     """
     Generic error class, catch-all for most Gengo issues.
     Special cases are handled by APILimit and AuthError.
 
     Note: You need to explicitly import them into your code, e.g:
 
-    from mygengo import MyGengoError, MyGengoAuthError
+    from gengo import GengoError, GengoAuthError
     """
     def __init__(self, msg, error_code=None):
         self.msg = msg
         if error_code == 1000:
             # Auth errors tend to be the most requested for their own
             # Exception instances, so give it to the masses, yo.
-            raise MyGengoAuthError(msg)
+            raise GengoAuthError(msg)
 
     def __str__(self):
         return repr(self.msg)
 
 
-class MyGengoAuthError(MyGengoError):
+class GengoAuthError(GengoError):
     """
     Raised when you try to access a protected resource and it fails due
     to some issue with your authentication.
@@ -109,14 +109,14 @@ class MyGengoAuthError(MyGengoError):
         return repr(self.msg)
 
 
-class MyGengo(object):
+class Gengo(object):
     def __init__(self, public_key=None, private_key=None, sandbox=False,
                  api_version='2', headers=None, debug=False):
         """
-        MyGengo(public_key = None, private_key = None, sandbox = False,
+        Gengo(public_key = None, private_key = None, sandbox = False,
         headers = None)
 
-        Instantiates an instance of MyGengo.
+        Instantiates an instance of Gengo.
 
         Parameters:
         public_key - Your 'public' key for Gengo. Retrieve this from your
@@ -135,7 +135,7 @@ class MyGengo(object):
             api_urls['sandbox'] if sandbox is True else api_urls['base']
         self.api_version = str(api_version)
         if self.api_version not in ('1.1', '2'):
-            raise Exception("mygengo-python library only supports " +
+            raise Exception("gengo-python library only supports " +
                             " versions 1.1 and 2 at the moment, please " +
                             " keep api_version to 1.1 or 2")
         self.public_key = public_key
@@ -259,11 +259,11 @@ class MyGengo(object):
                     for job_key, msg_code_list in results['err'].iteritems():
                         concatted_msg += '<%s: %s> ' % \
                             (job_key, msg_code_list[0]['msg'])
-                    raise MyGengoError(concatted_msg,
-                                       results['err'].itervalues().
-                                       next()[0]['code'])
-                raise MyGengoError(results['err']['msg'],
-                                   results['err']['code'])
+                    raise GengoError(concatted_msg,
+                                     results['err'].itervalues().
+                                     next()[0]['code'])
+                raise GengoError(results['err']['msg'],
+                                 results['err']['code'])
 
             # If not, return the results
             return results

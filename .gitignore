@@ -2,5 +2,5 @@
 build
 dist
 *.swp
-mygengo.egg-info
-mygengo/test_keys.py
+gengo.egg-info
+gengo/test_keys.py

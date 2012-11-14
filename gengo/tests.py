@@ -55,33 +55,33 @@ import os
 import random
 import time
 
-from mygengo import MyGengo, MyGengoError, MyGengoAuthError
+from gengo import Gengo, GengoError, GengoAuthError
 
 API_PUBKEY = os.getenv('GENGO_PUBKEY')
 API_PRIVKEY = os.getenv('GENGO_PRIVKEY')
 
 
-class TestMyGengoCore(unittest.TestCase):
+class TestGengoCore(unittest.TestCase):
     """
     Handles testing the core parts of Gengo (i.e, authentication
     signing, etc).
     """
     def test_MethodDoesNotExist(self):
-        myGengo = MyGengo(public_key=API_PUBKEY,
-                          private_key=API_PRIVKEY)
+        gengo = Gengo(public_key=API_PUBKEY,
+                      private_key=API_PRIVKEY)
         # With how we do functions, AttributeError is a bit tricky to
         # catch...
-        self.assertRaises(AttributeError, getattr, myGengo, 'bert')
+        self.assertRaises(AttributeError, getattr, Gengo, 'bert')
 
-    def test_MyGengoAuthNoCredentials(self):
-        myGengo = MyGengo(public_key='',
-                          private_key='')
-        self.assertRaises(MyGengoError, myGengo.getAccountStats)
+    def test_GengoAuthNoCredentials(self):
+        gengo = Gengo(public_key='',
+                      private_key='')
+        self.assertRaises(GengoError, gengo.getAccountStats)
 
-    def test_MyGengoAuthBadCredentials(self):
-        myGengo = MyGengo(public_key='bert',
-                          private_key='beeeerrrttttt')
-        self.assertRaises(MyGengoAuthError, myGengo.getAccountStats)
+    def test_GengoAuthBadCredentials(self):
+        gengo = Gengo(public_key='bert',
+                      private_key='beeeerrrttttt')
+        self.assertRaises(GengoAuthError, gengo.getAccountStats)
 
 
 class TestAccountMethods(unittest.TestCase):
@@ -91,16 +91,16 @@ class TestAccountMethods(unittest.TestCase):
     each method.
     """
     def setUp(self):
-        self.myGengo = MyGengo(public_key=API_PUBKEY,
-                               private_key=API_PRIVKEY)
-        self.myGengo.api_url = 'http://api.staging.gengo.com/{{version}}'
+        self.gengo = Gengo(public_key=API_PUBKEY,
+                           private_key=API_PRIVKEY)
+        self.gengo.api_url = 'http://api.staging.gengo.com/{{version}}'
 
     def test_getAccountStats(self):
-        stats = self.myGengo.getAccountStats()
+        stats = self.gengo.getAccountStats()
         self.assertEqual(stats['opstat'], 'ok')
 
     def test_getAccountBalance(self):
-        balance = self.myGengo.getAccountBalance()
+        balance = self.gengo.getAccountBalance()
         self.assertEqual(balance['opstat'], 'ok')
 
 
@@ -110,16 +110,16 @@ class TestLanguageServiceMethods(unittest.TestCase):
     translation service support from Gengo.
     """
     def setUp(self):
-        self.myGengo = MyGengo(public_key=API_PUBKEY,
-                               private_key=API_PRIVKEY)
-        self.myGengo.api_url = 'http://api.staging.gengo.com/{{version}}'
+        self.gengo = Gengo(public_key=API_PUBKEY,
+                           private_key=API_PRIVKEY)
+        self.gengo.api_url = 'http://api.staging.gengo.com/{{version}}'
 
     def test_getServiceLanguagePairs(self):
-        resp = self.myGengo.getServiceLanguagePairs()
+        resp = self.gengo.getServiceLanguagePairs()
         self.assertEqual(resp['opstat'], 'ok')
 
     def test_getServiceLanguages(self):
-        resp = self.myGengo.getServiceLanguages()
+        resp = self.gengo.getServiceLanguages()
         self.assertEqual(resp['opstat'], 'ok')
 
 
@@ -129,9 +129,9 @@ class TestTranslationSingleJobFlow(unittest.TestCase):
     and then deleting the job.
     """
     def setUp(self):
-        self.myGengo = MyGengo(public_key=API_PUBKEY,
-                               private_key=API_PRIVKEY)
-        self.myGengo.api_url = 'http://api.staging.gengo.com/{{version}}'
+        self.gengo = Gengo(public_key=API_PUBKEY,
+                           private_key=API_PRIVKEY)
+        self.gengo.api_url = 'http://api.staging.gengo.com/{{version}}'
         self.created_job_ids = []
 
         single_job = {
@@ -148,7 +148,7 @@ class TestTranslationSingleJobFlow(unittest.TestCase):
             'auto_approve': 0,
         }
 
-        job = self.myGengo.postTranslationJob(job=single_job)
+        job = self.gengo.postTranslationJob(job=single_job)
         self.assertEqual(job['opstat'], 'ok')
         self.assertIsNotNone(job['response']['job']['job_id'])
         self.created_job_ids.append(job['response']['job']['job_id'])
@@ -157,10 +157,10 @@ class TestTranslationSingleJobFlow(unittest.TestCase):
         """
         Tests posting a comment to a job.
         """
-        posted_comment = self.myGengo.postTranslationJobComment(
+        posted_comment = self.gengo.postTranslationJobComment(
             id=self.created_job_ids[0],
             comment={'body': 'I love lamp oh mai gawd'})
-        job_comments = self.myGengo.getTranslationJobComments(
+        job_comments = self.gengo.getTranslationJobComments(
             id=self.created_job_ids[0])
         self.assertEqual(posted_comment['opstat'], 'ok')
         self.assertEqual(job_comments['opstat'], 'ok')
@@ -178,22 +178,22 @@ class TestTranslationSingleJobFlow(unittest.TestCase):
         they could be disabled easily in a distribution or something.
         """
         # Pull down data about one specific job...
-        job = self.myGengo.getTranslationJob(id=self.created_job_ids[0])
+        job = self.gengo.getTranslationJob(id=self.created_job_ids[0])
         self.assertEqual(job['opstat'], 'ok')
 
         # Pull down the 10 most recently submitted jobs.
-        jobs = self.myGengo.getTranslationJobs()
+        jobs = self.gengo.getTranslationJobs()
         self.assertEqual(jobs['opstat'], 'ok')
 
         # Pull down feedback. This should work fine, but there'll be no
         # feedback.
-        feedback = self.myGengo.getTranslationJobFeedback(
+        feedback = self.gengo.getTranslationJobFeedback(
             id=self.created_job_ids[0])
         self.assertEqual(feedback['opstat'], 'ok')
 
         # Lastly, pull down any revisions that definitely didn't occur due
         # to this being a simulated test.
-        revisions = self.myGengo.getTranslationJobRevisions(
+        revisions = self.gengo.getTranslationJobRevisions(
             id=self.created_job_ids[0])
         self.assertEqual(revisions['opstat'], 'ok')
 
@@ -207,7 +207,7 @@ class TestTranslationSingleJobFlow(unittest.TestCase):
         Delete every job we've created.
         """
         for id in self.created_job_ids:
-            deleted_job = self.myGengo.deleteTranslationJob(id=id)
+            deleted_job = self.gengo.deleteTranslationJob(id=id)
             self.assertEqual(deleted_job['opstat'], 'ok')
 
 
@@ -221,9 +221,9 @@ class TestTranslationJobFlowFileUpload(unittest.TestCase):
         Creates the initial batch of jobs for the other test functions here
         to operate on.
         """
-        self.myGengo = MyGengo(public_key=API_PUBKEY,
-                               private_key=API_PRIVKEY)
-        self.myGengo.api_url = 'http://api.staging.gengo.com/{{version}}'
+        self.gengo = Gengo(public_key=API_PUBKEY,
+                           private_key=API_PRIVKEY)
+        self.gengo.api_url = 'http://api.staging.gengo.com/{{version}}'
         self.created_job_ids = []
 
         multiple_jobs_quote = {
@@ -245,7 +245,7 @@ class TestTranslationJobFlowFileUpload(unittest.TestCase):
 
         # Now that we've got the jobs, let's go ahead and see how much it'll
         # cost.
-        cost_assessment = self.myGengo.determineTranslationCost(
+        cost_assessment = self.gengo.determineTranslationCost(
             jobs={'jobs': multiple_jobs_quote})
         self.assertEqual(cost_assessment['opstat'], 'ok')
 
@@ -260,7 +260,7 @@ class TestTranslationJobFlowFileUpload(unittest.TestCase):
                 'force': 1,
             }
 
-        jobs = self.myGengo.postTranslationJobs(
+        jobs = self.gengo.postTranslationJobs(
             jobs={'jobs': multiple_jobs})
         self.assertEqual(jobs['opstat'], 'ok')
         self.assertTrue('order_id' in jobs['response'])
@@ -270,7 +270,7 @@ class TestTranslationJobFlowFileUpload(unittest.TestCase):
         # get some order information - in v2 the jobs need to have gone
         # through a queueing system so we wait a little bit
         time.sleep(10)
-        resp = self.myGengo.getTranslationOrderJobs(
+        resp = self.gengo.getTranslationOrderJobs(
             id=jobs['response']['order_id'])
         self.assertEqual(len(resp['response']['order']['jobs_available']), 2)
         self.created_job_ids.\
@@ -280,11 +280,11 @@ class TestTranslationJobFlowFileUpload(unittest.TestCase):
         """
         Tests posting a comment to a job.
         """
-        posted_comment = self.myGengo.postTranslationJobComment(
+        posted_comment = self.gengo.postTranslationJobComment(
             id=self.created_job_ids[0],
             comment={'body': 'I love lamp oh mai gawd'})
         self.assertEqual(posted_comment['opstat'], 'ok')
-        job_comments = self.myGengo.getTranslationJobComments(
+        job_comments = self.gengo.getTranslationJobComments(
             id=self.created_job_ids[0])
         self.assertEqual(posted_comment['opstat'], 'ok')
         self.assertEqual(job_comments['opstat'], 'ok')
@@ -305,27 +305,27 @@ class TestTranslationJobFlowFileUpload(unittest.TestCase):
         distribution or something.
         """
         # Pull down data about one specific job.
-        job = self.myGengo.getTranslationJob(id=self.created_job_ids[0])
+        job = self.gengo.getTranslationJob(id=self.created_job_ids[0])
         self.assertEqual(job['opstat'], 'ok')
 
         # Pull down the 10 most recently submitted jobs.
-        jobs = self.myGengo.getTranslationJobs()
+        jobs = self.gengo.getTranslationJobs()
         self.assertEqual(jobs['opstat'], 'ok')
 
         # Test getting the batch that a job is in.
-        job_batch = self.myGengo.getTranslationJobBatch(
+        job_batch = self.gengo.getTranslationJobBatch(
             id=self.created_job_ids[1])
         self.assertEqual(job_batch['opstat'], 'ok')
 
         # Pull down feedback. This should work fine, but there'll be no
         # feedback.
-        feedback = self.myGengo.getTranslationJobFeedback(
+        feedback = self.gengo.getTranslationJobFeedback(
             id=self.created_job_ids[0])
         self.assertEqual(feedback['opstat'], 'ok')
 
         # Lastly, pull down any revisions that definitely didn't occur due
         # to this being a simulated test.
-        revisions = self.myGengo.getTranslationJobRevisions(
+        revisions = self.gengo.getTranslationJobRevisions(
             id=self.created_job_ids[0])
         self.assertEqual(revisions['opstat'], 'ok')
 
@@ -339,7 +339,7 @@ class TestTranslationJobFlowFileUpload(unittest.TestCase):
         Delete every job we've created.
         """
         for id in self.created_job_ids:
-            deleted_job = self.myGengo.deleteTranslationJob(id=id)
+            deleted_job = self.gengo.deleteTranslationJob(id=id)
             self.assertEqual(deleted_job['opstat'], 'ok')
 
 
@@ -355,9 +355,9 @@ class TestTranslationJobFlowMixedOrder(unittest.TestCase):
         """
         # First we'll create three jobs - one regular, and two at the same
         # time...
-        self.myGengo = MyGengo(public_key=API_PUBKEY,
-                               private_key=API_PRIVKEY)
-        self.myGengo.api_url = 'http://api.staging.gengo.com/{{version}}'
+        self.gengo = Gengo(public_key=API_PUBKEY,
+                           private_key=API_PRIVKEY)
+        self.gengo.api_url = 'http://api.staging.gengo.com/{{version}}'
         self.created_job_ids = []
 
         multiple_jobs_quote = {
@@ -392,7 +392,7 @@ class TestTranslationJobFlowMixedOrder(unittest.TestCase):
 
         # Now that we've got the job, let's go ahead and see how much it'll
         # cost.
-        cost_assessment = self.myGengo.determineTranslationCost(
+        cost_assessment = self.gengo.determineTranslationCost(
             jobs={'jobs': multiple_jobs_quote})
         self.assertEqual(cost_assessment['opstat'], 'ok')
 
@@ -416,7 +416,7 @@ class TestTranslationJobFlowMixedOrder(unittest.TestCase):
                 multiple_jobs[k]['use_preferred'] = 0
                 multiple_jobs[k]['force'] = 1
 
-        jobs = self.myGengo.postTranslationJobs(
+        jobs = self.gengo.postTranslationJobs(
             jobs={'jobs': multiple_jobs})
         self.assertEqual(jobs['opstat'], 'ok')
         self.assertTrue('order_id' in jobs['response'])
@@ -426,7 +426,7 @@ class TestTranslationJobFlowMixedOrder(unittest.TestCase):
         # get some order information - in v2 the jobs need to have gone
         # through a queueing system so we wait a little bit
         time.sleep(30)
-        resp = self.myGengo.getTranslationOrderJobs(
+        resp = self.gengo.getTranslationOrderJobs(
             id=jobs['response']['order_id'])
         self.assertEqual(len(resp['response']['order']['jobs_available']), 2)
         self.created_job_ids.\
@@ -436,11 +436,11 @@ class TestTranslationJobFlowMixedOrder(unittest.TestCase):
         """
         Tests posting a comment to a job.
         """
-        posted_comment = self.myGengo.postTranslationJobComment(
+        posted_comment = self.gengo.postTranslationJobComment(
             id=self.created_job_ids[0],
             comment={'body': 'I love lamp oh mai gawd'})
         self.assertEqual(posted_comment['opstat'], 'ok')
-        job_comments = self.myGengo.getTranslationJobComments(
+        job_comments = self.gengo.getTranslationJobComments(
             id=self.created_job_ids[0])
         self.assertEqual(posted_comment['opstat'], 'ok')
         self.assertEqual(job_comments['opstat'], 'ok')
@@ -461,27 +461,27 @@ class TestTranslationJobFlowMixedOrder(unittest.TestCase):
         distribution or something.
         """
         # Pull down data about one specific job...
-        job = self.myGengo.getTranslationJob(id=self.created_job_ids[0])
+        job = self.gengo.getTranslationJob(id=self.created_job_ids[0])
         self.assertEqual(job['opstat'], 'ok')
 
         # Pull down the 10 most recently submitted jobs.
-        jobs = self.myGengo.getTranslationJobs()
+        jobs = self.gengo.getTranslationJobs()
         self.assertEqual(jobs['opstat'], 'ok')
 
         # Test getting the batch that a job is in...
-        job_batch = self.myGengo.getTranslationJobBatch(
+        job_batch = self.gengo.getTranslationJobBatch(
             id=self.created_job_ids[1])
         self.assertEqual(job_batch['opstat'], 'ok')
 
         # Pull down feedback. This should work fine, but there'll be no
         # feedback.
-        feedback = self.myGengo.getTranslationJobFeedback(
+        feedback = self.gengo.getTranslationJobFeedback(
             id=self.created_job_ids[0])
         self.assertEqual(feedback['opstat'], 'ok')
 
         # Lastly, pull down any revisions that definitely didn't occur due
         # to this being a simulated test.
-        revisions = self.myGengo.getTranslationJobRevisions(
+        revisions = self.gengo.getTranslationJobRevisions(
             id=self.created_job_ids[0])
         self.assertEqual(revisions['opstat'], 'ok')
 
@@ -496,7 +496,7 @@ class TestTranslationJobFlowMixedOrder(unittest.TestCase):
         thorough testing scenario.
         """
         for id in self.created_job_ids:
-            deleted_job = self.myGengo.deleteTranslationJob(id=id)
+            deleted_job = self.gengo.deleteTranslationJob(id=id)
             self.assertEqual(deleted_job['opstat'], 'ok')
 
 
@@ -510,19 +510,19 @@ class TestGlossaryFunctions(unittest.TestCase):
         """
         # First we'll create three jobs - one regular, and two at the same
         # time...
-        self.myGengo = MyGengo(public_key=API_PUBKEY,
-                               private_key=API_PRIVKEY)
-        self.myGengo.api_url = 'http://api.staging.gengo.com/{{version}}'
+        self.gengo = Gengo(public_key=API_PUBKEY,
+                           private_key=API_PRIVKEY)
+        self.gengo.api_url = 'http://api.staging.gengo.com/{{version}}'
 
     def test_getGlossaryList(self):
-        resp = self.myGengo.getGlossaryList()
+        resp = self.gengo.getGlossaryList()
         self.assertEqual(resp['opstat'], 'ok')
 
     @unittest.skip("unless you created a glossary on the site (not yet " +
                    "supported via the API) this test does not make a " +
                    " lot of sense.")
     def test_getGlossary(self):
-        resp = self.myGengo.getGlossary(id=42)
+        resp = self.gengo.getGlossary(id=42)
         resp
 
 

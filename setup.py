@@ -64,12 +64,12 @@ class Pep8Command(Command):
             sys.exit(1)
 
         cwd = os.getcwd()
-        retcode = call(('pep8 %s/mygengo/' % (cwd)).split(' '))
+        retcode = call(('pep8 %s/gengo/' % (cwd)).split(' '))
         sys.exit(retcode)
 
 setup(
     # Basic package information.
-    name='mygengo',
+    name='gengo',
     version=__version__,
     packages=find_packages(),
 

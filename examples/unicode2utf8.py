@@ -33,11 +33,11 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from mygengo import MyGengo
+from gengo import Gengo
 
-# This method doesn't require an instance of MyGengo, it's
+# This method doesn't require an instance of Gengo, it's
 # purely utility. You'll possibly end up using it to ensure
 # that your data is utf-8 encoded before submitting it to Gengo;
 # if your method calls fail, this is probably the first thing you should
 # check!
-MyGengo.unicode2utf8("私は")
+Gengo.unicode2utf8("私は")

@@ -33,13 +33,13 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from mygengo import MyGengo
+from gengo import Gengo
 
-# Get an instance of MyGengo to work with...
-gengo = MyGengo(
+# Get an instance of Gengo to work with...
+gengo = Gengo(
     public_key='your_public_key',
     private_key='your_private_key',
-    sandbox=True, # possibly false, depending on your dev needs
+    sandbox=True,, 
 )
 
 # This is an exhaustive view of this object; chances are your code will never
