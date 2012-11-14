@@ -425,7 +425,7 @@ class TestTranslationJobFlowMixedOrder(unittest.TestCase):
 
         # get some order information - in v2 the jobs need to have gone
         # through a queueing system so we wait a little bit
-        time.sleep(30)
+        time.sleep(10)
         resp = self.gengo.getTranslationOrderJobs(
             id=jobs['response']['order_id'])
         self.assertEqual(len(resp['response']['order']['jobs_available']), 2)
