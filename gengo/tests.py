@@ -93,7 +93,7 @@ class TestAccountMethods(unittest.TestCase):
     def setUp(self):
         self.gengo = Gengo(public_key=API_PUBKEY,
                            private_key=API_PRIVKEY)
-        self.gengo.api_url = 'http://api.staging.gengo.com/{{version}}'
+        self.gengo.api_url = 'http://api.staging.gengo.com/%(version)s'
 
     def test_getAccountStats(self):
         stats = self.gengo.getAccountStats()
@@ -112,7 +112,7 @@ class TestLanguageServiceMethods(unittest.TestCase):
     def setUp(self):
         self.gengo = Gengo(public_key=API_PUBKEY,
                            private_key=API_PRIVKEY)
-        self.gengo.api_url = 'http://api.staging.gengo.com/{{version}}'
+        self.gengo.api_url = 'http://api.staging.gengo.com/%(version)s'
 
     def test_getServiceLanguagePairs(self):
         resp = self.gengo.getServiceLanguagePairs()
@@ -131,7 +131,7 @@ class TestTranslationSingleJobFlow(unittest.TestCase):
     def setUp(self):
         self.gengo = Gengo(public_key=API_PUBKEY,
                            private_key=API_PRIVKEY)
-        self.gengo.api_url = 'http://api.staging.gengo.com/{{version}}'
+        self.gengo.api_url = 'http://api.staging.gengo.com/%(version)s'
         self.created_job_ids = []
 
         single_job = {
@@ -223,7 +223,7 @@ class TestTranslationJobFlowFileUpload(unittest.TestCase):
         """
         self.gengo = Gengo(public_key=API_PUBKEY,
                            private_key=API_PRIVKEY)
-        self.gengo.api_url = 'http://api.staging.gengo.com/{{version}}'
+        self.gengo.api_url = 'http://api.staging.gengo.com/%(version)s'
         self.created_job_ids = []
 
         multiple_jobs_quote = {
@@ -357,7 +357,7 @@ class TestTranslationJobFlowMixedOrder(unittest.TestCase):
         # time...
         self.gengo = Gengo(public_key=API_PUBKEY,
                            private_key=API_PRIVKEY)
-        self.gengo.api_url = 'http://api.staging.gengo.com/{{version}}'
+        self.gengo.api_url = 'http://api.staging.gengo.com/%(version)s'
         self.created_job_ids = []
 
         multiple_jobs_quote = {
@@ -512,7 +512,7 @@ class TestGlossaryFunctions(unittest.TestCase):
         # time...
         self.gengo = Gengo(public_key=API_PUBKEY,
                            private_key=API_PRIVKEY)
-        self.gengo.api_url = 'http://api.staging.gengo.com/{{version}}'
+        self.gengo.api_url = 'http://api.staging.gengo.com/%(version)s'
 
     def test_getGlossaryList(self):
         resp = self.gengo.getGlossaryList()
