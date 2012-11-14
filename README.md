@@ -5,7 +5,7 @@ Gengo Python Library (for the [Gengo API](http://gengo.com/))
 Translating your tools and products helps people all over the world access them; this is, of course, a
 somewhat tricky problem to solve. **[Gengo](http://gengo.com/)** is a service that offers human-translation
 (which is often a higher quality than machine translation), and an API to manage sending in work and watching
-jobs. This is a python interface to make using the API simpler (some would say incredibly easy).
+jobs. This is a Python interface to make using the API simpler.
 
 Installation & Requirements
 -------------------------------------------------------------------------------------------------------
@@ -23,20 +23,17 @@ This will also install the `requests` package. If you're running on a version of
 
      sudo pip install simplejson
 
-A version of Gengo for Python 3 is in the works, but as Python 3 isn't even quite deemed production
-ready/reliable yet, it's not the highest priority at the moment.
-
 
 Tests - Running Them, etc
 ------------------------------------------------------------------------------------------------------
-Gengo has a full suite of Unit Tests. To run them, export your public and private keys in the shell like:
+Gengo has a full suite of unit tests. To run them, export your public and private keys in the shell like so:
 
 ```shell
 export GENGO_PUBKEY='your public key here'
 export GENGO_PRIVKEY='your private key here'
 ```
 
-Then grab the source, head into the mygengo directory, and execute the tests file with the Python interpreter, ala:
+Then grab the source, head into the gengo directory, and execute the tests file like so:
 
     python tests.py
 
@@ -55,21 +52,21 @@ If you come across any issues, please file them on the **[Github project issue t
 
 Documentation
 -----------------------------------------------------------------------------------------------------
-Full documentation can be found **[here](http://developers.gengo.com)**, but anyone should be able to cobble together
-a working script with the following:
+Full documentation can be found **[here](http://developers.gengo.com)**, but anyone should be able to
+get a working script with the following:
 
 ``` python
-from mygengo import MyGengo
+from gengo import Gengo
 
-gengo = MyGengo(
+gengo = Gengo(
     public_key='your_public_key',
     private_key='your_private_key',
-    sandbox=True,  # possibly false, depending on your dev needs
+    sandbox=True,
 )
 
 print gengo.getAccountBalance()
 ```
 
-All function definitions can be found inside mygengo/mockdb.py as a dictionary: the
+All function definitions can be found inside gengo/mockdb.py as a dictionary: the
 key of the dictionary entry is the function name, and the parameters are exactly the same as specified
 over on the **[Gengo API docs](http://developers.gengo.com)**.
