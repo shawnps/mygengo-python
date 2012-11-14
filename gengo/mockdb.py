@@ -49,7 +49,7 @@ replaced with 47, instead of defaulting to 1 (said defaulting takes place
 at conversion time).
 """
 
-# Gengo API urls. %(version)s gets replaced with v1, etc at run time.
+# Gengo API urls. %(version)s gets replaced with v1/etc at run time.
 api_urls = {
     'sandbox': 'http://api.sandbox.mygengo.com/%(version)s',
     'base': 'http://api.gengo.com/%(version)s',
