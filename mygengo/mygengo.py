@@ -262,9 +262,16 @@ class MyGengo(object):
                                                     post_data, file_data)
             results = response.json
 
-            # See if we got any weird or odd errors back that we can
-            # cleanly raise on or something...
+            # See if we got any errors back that we can cleanly raise on
             if 'opstat' in results and results['opstat'] != 'ok':
+                if len(results['err']) > 1:
+                    concatted_msg = ''
+                    for job_key, msg_code_list in results['err'].iteritems():
+                        concatted_msg += '<%s: %s> ' % \
+                            (job_key, msg_code_list[0]['msg'])
+                    raise MyGengoError(concatted_msg,
+                                       results['err'].itervalues().
+                                       next()[0]['code'])
                 raise MyGengoError(results['err']['msg'],
                                    results['err']['code'])
 
