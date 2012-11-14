@@ -34,11 +34,6 @@
 
 """
 Official Python library for interfacing with the Gengo API.
-It's released under a BSD-style license and totally, freely available.
-Check it out on Github
-if you find any issues!
-
-Questions, comments? shawn.smith@gengo.com
 """
 
 __author__ = 'Shawn Smith <shawn.smith@gengo.com>'
@@ -57,9 +52,9 @@ from string import lower
 # mockdb is a file with a dictionary of every API endpoint for Gengo.
 from mockdb import api_urls, apihash
 
-# There are some special setups (like, oh, a Django application) where
-# simplejson exists behind the scenes anyway. Past Python 2.6, this should
-# never really cause any problems to begin with.
+# There are some special setups (like a Django application) where
+# simplejson exists. Past Python 2.6, this should never
+# cause any problems.
 try:
     # Python 2.6 and up
     import json
@@ -77,7 +72,6 @@ except ImportError:
             from django.utils import simplejson as json
             json  # silence pyflakes
         except:
-            # Seriously wtf is wrong with you if you get this Exception.
             raise Exception("gengo requires the simplejson library (or " +
                             "Python 2.6+) to work. " +
                             "http://www.undefined.org/python/")
@@ -134,8 +128,8 @@ class MyGengo(object):
         api_version - version 2 and 1.1 are supported. defaults to 2
         headers - User agent header, dictionary style ala {'User-Agent':
         'Bert'}
-        debug - a flag (True/False) which will cause things to properly
-        blow the hell up on exceptions. Useful for debugging. ;P
+        debug - a flag (True/False) which will cause the library to print
+        useful debugging info.
         """
         self.api_url = \
             api_urls['sandbox'] if sandbox is True else api_urls['base']
@@ -146,15 +140,11 @@ class MyGengo(object):
                             " keep api_version to 1.1 or 2")
         self.public_key = public_key
         self.private_key = private_key
-        # If there's headers, set them, otherwise be an embarassing parent
-        # for their own good.
         self.headers = headers
         if self.headers is None:
             self.headers = \
                 {'User-agent': 'Gengo Python Library;' +
                     'Version %s; http://gengo.com/' % __version__}
-        # No matter whether we get some supplied or use the generic, tell
-        # it we want JSON. ;P
         self.headers['Accept'] = 'application/json'
         self.debug = debug
 
@@ -275,7 +265,7 @@ class MyGengo(object):
                 raise MyGengoError(results['err']['msg'],
                                    results['err']['code'])
 
-            # If not, screw it, return the junks!
+            # If not, return the results
             return results
 
         if api_call in apihash:
